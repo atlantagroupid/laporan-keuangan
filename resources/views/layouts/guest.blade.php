@@ -21,51 +21,40 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased text-slate-900 bg-white">
-        <div class="min-h-screen flex flex-col lg:flex-row">
-            
-            <!-- LEFT COLUMN: BRANDING (Hidden on Mobile, Visible on Desktop) -->
-            <div class="lg:w-1/2 brand-gradient relative hidden lg:flex flex-col justify-between p-12 text-white">
-                <!-- Top: Logo -->
-                <div class="relative z-10 flex items-center gap-3">
-                     @if(isset($setting) && $setting->app_logo && file_exists(public_path($setting->app_logo)))
-                        <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                            <img src="{{ asset($setting->app_logo) }}" alt="Logo" class="w-6 h-6 object-contain">
-                        </div>
-                    @endif
-                    <span class="text-xl font-bold tracking-tight">{{ $setting->app_title ?? 'Laporan Keuangan' }}</span>
-                </div>
+    <body class="font-sans antialiased text-slate-900 overflow-x-hidden">
+        <!-- Vibrant Mesh Background -->
+        <div class="vibrant-mesh-bg"></div>
 
-                <!-- Center: Hero Text -->
-                <div class="relative z-10 max-w-lg">
-                    <h1 class="text-4xl font-bold mb-6 leading-tight">
-                        Kelola Keuangan Anda dengan Lebih Cerdas.
-                    </h1>
-                    <p class="text-blue-100 text-lg leading-relaxed">
-                        Platform manajemen keuangan modern untuk membantu Anda melacak pemasukan, pengeluaran, dan mencapai target finansial.
-                    </p>
-                </div>
+        <div class="min-h-screen flex flex-col items-center justify-center p-6 relative">
+            <!-- Background Aura Glows (Contained) -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+                <div class="aura-glow" style="width: 600px; height: 600px; background: rgba(85, 86, 145, 0.4); top: -100px; left: -100px;"></div>
+                <div class="aura-glow" style="width: 500px; height: 500px; background: rgba(14, 165, 233, 0.3); bottom: -100px; right: -100px; animation-delay: -5s;"></div>
+            </div>
 
-                <!-- Bottom: Footer -->
-                <div class="relative z-10 text-sm text-blue-200">
-                    &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+            <!-- Branding Header (Subtle) -->
+            <div class="text-center mb-10 animate-entrance relative z-10">
+                @if(isset($setting) && $setting->app_logo && file_exists(public_path($setting->app_logo)))
+                    <div class="w-16 h-16 mx-auto mb-5 bg-white rounded-2xl shadow-lg flex items-center justify-center border border-slate-100 p-3">
+                        <img src="{{ asset($setting->app_logo) }}" alt="Logo" class="w-full h-full object-contain">
+                    </div>
+                @endif
+                <h1 class="text-2xl font-bold tracking-tight text-slate-800">
+                    {{ $setting->app_title ?? 'Laporan Keuangan' }}
+                </h1>
+                <p class="text-sm text-slate-500 font-medium">Platform Manajemen Keuangan Modern</p>
+            </div>
+
+            <!-- Centered Vibrant Glass Card -->
+            <div class="w-full max-w-md animate-entrance relative z-10" style="animation-delay: 0.1s;">
+                <div class="glass-card-vibrant p-8 sm:p-12">
+                    {{ $slot }}
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: CONTENT (FORM) -->
-            <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-white">
-                <div class="w-full max-w-md form-enter">
-                    <!-- Mobile Logo (Visible only on smaller screens) -->
-                    <div class="lg:hidden text-center mb-8">
-                         @if(isset($setting) && $setting->app_logo && file_exists(public_path($setting->app_logo)))
-                            <img src="{{ asset($setting->app_logo) }}" alt="Logo" class="w-16 h-16 mx-auto mb-4 object-contain">
-                        @endif
-                        <h2 class="text-2xl font-bold text-slate-900">{{ $setting->app_title ?? 'Laporan Keuangan' }}</h2>
-                    </div>
-
-                    <!-- Slot Content (Login/Register Forms) -->
-                    {{ $slot }}
-                </div>
+            <!-- Subtle Footer -->
+            <div class="mt-12 text-center text-xs text-slate-400 font-medium animate-entrance relative z-10" style="animation-delay: 0.2s;">
+                &copy; {{ date('Y') }} {{ config('app.name') }}. Built for Precision.
             </div>
 
         </div>

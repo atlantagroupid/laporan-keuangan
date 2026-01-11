@@ -18,12 +18,216 @@
     font-size: 0.85em;
     font-weight: 500;
 }
+
+/* Modern Transaction styles */
+.trx-card {
+    border: none;
+    border-radius: 12px;
+    background: #fff;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.trx-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.trx-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+.icon-in { background-color: rgba(16, 185, 129, 0.1); color: #10b981; }
+.icon-out { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+.table-transactions thead th {
+    background-color: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.025em;
+    border-top: none;
+}
+
+/* Modal Modern Styles */
+.modal-modern .modal-content {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+}
+.modal-header-modern {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    border-radius: 20px 20px 0 0;
+}
+.modal-body-modern {
+    padding: 2rem;
+}
+
+/* Segmented Control for Transaction Type */
+.type-selector {
+    display: flex;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+.type-btn {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    background: transparent;
+    color: #64748b;
+}
+.type-btn.active[data-type="pemasukan"] {
+    background: white;
+    color: #10b981;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+.type-btn.active[data-type="pengeluaran"] {
+    background: white;
+    color: #ef4444;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+.amount-input-group {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.amount-display-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1e293b;
+}
+.amount-display-container span { margin-right: 5px; opacity: 0.4; }
+.amount-hidden-input {
+    border: none;
+    background: transparent;
+    text-align: center;
+    width: 100%;
+    color: inherit;
+    font-weight: inherit;
+    outline: none;
+    padding: 0;
+}
+.amount-hidden-input::placeholder { color: #cbd5e1; }
+
+.modern-form-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+.modern-input-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.modern-input-icon i {
+    position: absolute;
+    left: 15px;
+    color: #94a3b8;
+}
+.modern-input-icon .form-control, .modern-input-icon .form-select {
+    padding-left: 45px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    height: 50px;
+    transition: all 0.2s;
+}
+.modern-input-icon .form-control:focus {
+    border-color: #555691;
+    box-shadow: 0 0 0 4px rgba(85, 86, 145, 0.1);
+}
+
+/* Stat Cards Mini */
+.stat-card-mini {
+    border: none;
+    border-radius: 16px;
+    padding: 1.25rem;
+    color: white;
+    height: 100%;
+    transition: transform 0.2s;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+.stat-card-mini:hover {
+    transform: translateY(-5px);
+}
+.stat-card-mini::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    z-index: -1;
+}
+.stat-bg-purple { background: linear-gradient(135deg, #555691 0%, #7c7eb2 100%); }
+.stat-bg-green { background: linear-gradient(135deg, #10b981 0%, #34d399 100%); }
+.stat-bg-red { background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); }
+.stat-card-mini i {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+}
+.stat-card-mini .val {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+.stat-card-mini .lbl {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 767.98px) {
+    .desktop-only { display: none !important; }
+    .modal-dialog-bottom {
+        margin: 0;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    .modal-dialog-bottom .modal-content {
+        border-radius: 20px 20px 0 0;
+        height: auto;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+@media (min-width: 768px) {
+    .mobile-only { display: none !important; }
+}
 </style>
 @endpush
 
 @section('content')
 <div class="container py-4">
-    <!-- Header -->
     <!-- Header -->
     <div class="app-header p-4 text-white mb-4 bg-gradient-primary rounded-3 shadow-sm">
         <div class="d-flex justify-content-between align-items-center">
@@ -39,112 +243,170 @@
 
     <!-- Dashboard Stats -->
     <div class="row g-3 mb-4">
-        <div class="col-md-4">
-            <div class="stat-card p-3 text-center">
-                <div class="stat-label text-muted">Pemasukan</div>
-                <div class="stat-value text-success-custom">{{ number_format($totalIn, 0, ',', '.') }}</div>
+        <div class="col-6 col-md-4">
+            <div class="stat-card-mini stat-bg-green shadow-sm">
+                <i class="fas fa-arrow-down"></i>
+                <div class="val">Rp {{ number_format($totalIn, 0, ',', '.') }}</div>
+                <div class="lbl">Pemasukan</div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="stat-card p-3 text-center">
-                <div class="stat-label text-muted">Pengeluaran</div>
-                <div class="stat-value text-danger-custom">{{ number_format($totalOut, 0, ',', '.') }}</div>
+        <div class="col-6 col-md-4">
+            <div class="stat-card-mini stat-bg-red shadow-sm">
+                <i class="fas fa-arrow-up"></i>
+                <div class="val">Rp {{ number_format($totalOut, 0, ',', '.') }}</div>
+                <div class="lbl">Pengeluaran</div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="stat-card p-3 text-center">
-                <div class="stat-label text-muted">Saldo</div>
-                <div class="stat-value text-primary-custom">{{ number_format($balance, 0, ',', '.') }}</div>
+        <div class="col-12 col-md-4">
+            <div class="stat-card-mini stat-bg-purple shadow-sm">
+                <i class="fas fa-wallet"></i>
+                <div class="val">Rp {{ number_format($balance, 0, ',', '.') }}</div>
+                <div class="lbl">Total Saldo</div>
             </div>
         </div>
     </div>
 
-    <!-- Filters & Table -->
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <!-- Filters & List -->
+    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+        <div class="card-body p-0">
             <!-- Toolbar -->
-            <form method="GET" action="{{ route('dashboard') }}" id="filterForm">
-                <div class="row g-2 mb-3">
-                    <div class="col-md-3">
-                        <input type="text" name="search" class="form-control" placeholder="Cari keterangan..." value="{{ request('search') }}">
+            <div class="p-3 bg-light border-bottom">
+                <form method="GET" action="{{ route('dashboard') }}" id="filterForm">
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <input type="text" name="search" class="form-control" placeholder="Cari keterangan..." value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <select name="wallet_id" class="form-select" onchange="document.getElementById('filterForm').submit()">
+                                <option value="all">Semua Dompet</option>
+                                @foreach($wallets as $wallet)
+                                <option value="{{ $wallet->id }}" {{ request('wallet_id') == $wallet->id ? 'selected' : '' }}>{{ $wallet->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select name="filter_type" class="form-select" id="filterType" onchange="toggleFilterInputs()">
+                                <option value="">Semua Waktu</option>
+                                <option value="daily" {{ request('filter_type') == 'daily' ? 'selected' : '' }}>Harian</option>
+                                <option value="monthly" {{ request('filter_type') == 'monthly' ? 'selected' : '' }}>Bulanan</option>
+                                <option value="yearly" {{ request('filter_type') == 'yearly' ? 'selected' : '' }}>Tahunan</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="date" name="filter_date" class="form-control dynamic-date {{ request('filter_type') == 'daily' ? 'show' : '' }}" id="fDaily" value="{{ request('filter_date', date('Y-m-d')) }}">
+                            <input type="month" name="filter_month" class="form-control dynamic-date {{ request('filter_type') == 'monthly' ? 'show' : '' }}" id="fMonthly" value="{{ request('filter_month', date('Y-m')) }}">
+                            <input type="number" name="filter_year" class="form-control dynamic-date {{ request('filter_type') == 'yearly' ? 'show' : '' }}" id="fYearly" placeholder="Tahun" value="{{ request('filter_year', date('Y')) }}">
+                        </div>
+                        <div class="col-md-3 text-end d-flex gap-1 justify-content-end">
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                            <a href="{{ route('export.excel', request()->query()) }}" class="btn btn-excel btn-sm text-white"><i class="fas fa-file-excel"></i></a>
+                            <a href="{{ route('export.pdf', request()->query()) }}" class="btn btn-pdf btn-sm text-white"><i class="fas fa-file-pdf"></i></a>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <select name="wallet_id" class="form-select" onchange="document.getElementById('filterForm').submit()">
-                            <option value="all">Semua Dompet</option>
-                            @foreach($wallets as $wallet)
-                            <option value="{{ $wallet->id }}" {{ request('wallet_id') == $wallet->id ? 'selected' : '' }}>{{ $wallet->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <select name="filter_type" class="form-select" id="filterType" onchange="toggleFilterInputs()">
-                            <option value="">Semua Waktu</option>
-                            <option value="daily" {{ request('filter_type') == 'daily' ? 'selected' : '' }}>Harian</option>
-                            <option value="monthly" {{ request('filter_type') == 'monthly' ? 'selected' : '' }}>Bulanan</option>
-                            <option value="yearly" {{ request('filter_type') == 'yearly' ? 'selected' : '' }}>Tahunan</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="date" name="filter_date" class="form-control dynamic-date {{ request('filter_type') == 'daily' ? 'show' : '' }}" id="fDaily" value="{{ request('filter_date', date('Y-m-d')) }}">
-                        <input type="month" name="filter_month" class="form-control dynamic-date {{ request('filter_type') == 'monthly' ? 'show' : '' }}" id="fMonthly" value="{{ request('filter_month', date('Y-m')) }}">
-                        <input type="number" name="filter_year" class="form-control dynamic-date {{ request('filter_type') == 'yearly' ? 'show' : '' }}" id="fYearly" placeholder="Tahun" value="{{ request('filter_year', date('Y')) }}">
-                    </div>
-                    <div class="col-md-3 text-end">
-                        <button type="submit" class="btn btn-primary btn-sm me-1"><i class="fas fa-search"></i></button>
-                        <a href="{{ route('export.excel', request()->query()) }}" class="btn btn-excel btn-sm text-white me-1"><i class="fas fa-file-excel"></i></a>
-                        <a href="{{ route('export.pdf', request()->query()) }}" class="btn btn-pdf btn-sm text-white"><i class="fas fa-file-pdf"></i></a>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
 
             <!-- Statistics Button -->
-            <div class="mb-4">
-                <button class="btn btn-outline-primary w-100 py-2 shadow-sm fw-bold border-2 rounded-3" data-bs-toggle="modal" data-bs-target="#statisticsModal">
+            <div class="p-3 bg-white border-bottom">
+                <button class="btn btn-outline-primary btn-sm w-100 py-2 fw-bold border-2 rounded-3" data-bs-toggle="modal" data-bs-target="#statisticsModal">
                     <i class="fas fa-chart-pie me-2"></i>Lihat Analisis & Statistik Keuangan
                 </button>
             </div>
 
-            <!-- Table -->
-            <div class="table-responsive">
-                <table class="table table-hover table-transactions">
-                    <thead>
-                        <tr>
-                            <th class="text-center" style="width: 50px">No</th>
-                            <th>Dompet</th>
-                            <th>Tanggal</th>
-                            <th>Keterangan</th>
-                            <th class="text-end">Masuk</th>
-                            <th class="text-end">Keluar</th>
-                            <th class="text-end">Saldo</th>
-                            <th class="text-center" style="width: 100px">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($transactions as $index => $trx)
-                        <tr>
-                            <td class="text-center">{{ $index + 1 }}</td>
-                            <td><span class="badge-wallet">{{ $trx->wallet->name }}</span></td>
-                            <td>{{ $trx->tanggal->translatedFormat('d F Y') }}</td>
-                            <td><strong>{{ $trx->keterangan }}</strong></td>
-                            <td class="text-end text-success-custom">{{ $trx->tipe === 'pemasukan' ? number_format($trx->jumlah, 0, ',', '.') : '-' }}</td>
-                            <td class="text-end text-danger-custom">{{ $trx->tipe === 'pengeluaran' ? number_format($trx->jumlah, 0, ',', '.') : '-' }}</td>
-                            <td class="text-end fw-bold {{ $trx->saldo < 0 ? 'text-danger-custom' : 'text-primary-custom' }}">{{ number_format($trx->saldo, 0, ',', '.') }}</td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-warning" onclick="editTransaction({{ json_encode($trx) }})"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{ route('transactions.destroy', $trx) }}', 'transaksi ini')"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">
-                                <i class="fas fa-wallet fa-3x mb-3 opacity-50"></i>
-                                <p class="mb-0">Tidak ada data ditemukan</p>
-                            </td>
-                        </tr>
-                        @endforelse
+            <!-- Transactions List -->
+            <div class="transactions-container">
+                <!-- Desktop Table -->
+                <div class="table-responsive d-none d-md-block">
+                    <table class="table table-hover table-transactions mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 50px">No</th>
+                                <th>Dompet</th>
+                                <th>Tanggal</th>
+                                <th>Keterangan</th>
+                                <th class="text-end">Jumlah</th>
+                                <th class="text-end">Saldo</th>
+                                <th class="text-center" style="width: 120px">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($transactions as $index => $trx)
+                            <tr>
+                                <td class="text-center text-muted">{{ $index + 1 }}</td>
+                                <td><span class="badge-wallet">{{ $trx->wallet->name }}</span></td>
+                                <td class="text-nowrap">{{ $trx->tanggal->translatedFormat('d F Y') }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="trx-icon me-3 {{ $trx->tipe === 'pemasukan' ? 'icon-in' : 'icon-out' }}">
+                                            <i class="fas {{ $trx->tipe === 'pemasukan' ? 'fa-arrow-down' : 'fa-arrow-up' }}"></i>
+                                        </div>
+                                        <div class="fw-bold">{{ $trx->keterangan }}</div>
+                                    </div>
+                                </td>
+                                <td class="text-end fw-bold {{ $trx->tipe === 'pemasukan' ? 'text-success-custom' : 'text-danger-custom' }}">
+                                    {{ $trx->tipe === 'pemasukan' ? '+' : '-' }} {{ number_format($trx->jumlah, 0, ',', '.') }}
+                                </td>
+                                <td class="text-end fw-bold {{ $trx->saldo < 0 ? 'text-danger-custom' : 'text-primary-custom' }}">
+                                    {{ number_format($trx->saldo, 0, ',', '.') }}
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-warning rounded-start" onclick="editTransaction({{ json_encode($trx) }})"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger rounded-end" onclick="confirmDelete('{{ route('transactions.destroy', $trx) }}', 'transaksi ini')"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-5 text-muted">
+                                    <i class="fas fa-wallet fa-3x mb-3 opacity-25"></i>
+                                    <p class="mb-0">Tidak ada data ditemukan</p>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
 
-                    </tbody>
-                </table>
+                <!-- Mobile Card List -->
+                <div class="d-block d-md-none p-3 bg-light">
+                    @forelse($transactions as $trx)
+                    <div class="trx-card p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center">
+                                <div class="trx-icon me-2 {{ $trx->tipe === 'pemasukan' ? 'icon-in' : 'icon-out' }}">
+                                    <i class="fas {{ $trx->tipe === 'pemasukan' ? 'fa-arrow-down' : 'fa-arrow-up' }}"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">{{ $trx->keterangan }}</div>
+                                    <small class="text-muted">{{ $trx->tanggal->translatedFormat('d F Y') }}</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold {{ $trx->tipe === 'pemasukan' ? 'text-success-custom' : 'text-danger-custom' }}">
+                                    {{ $trx->tipe === 'pemasukan' ? '+' : '-' }} {{ number_format($trx->jumlah, 0, ',', '.') }}
+                                </div>
+                                <span class="badge-wallet" style="font-size: 0.7em;">{{ $trx->wallet->name }}</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                            <div class="small">
+                                <span class="text-muted">Saldo akhir:</span> 
+                                <span class="fw-bold {{ $trx->saldo < 0 ? 'text-danger-custom' : 'text-primary-custom' }}">Rp {{ number_format($trx->saldo, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-light border" onclick="editTransaction({{ json_encode($trx) }})"><i class="fas fa-edit text-warning"></i></button>
+                                <button class="btn btn-sm btn-light border" onclick="confirmDelete('{{ route('transactions.destroy', $trx) }}', 'transaksi ini')"><i class="fas fa-trash text-danger"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="text-center py-5 text-muted">
+                        <i class="fas fa-wallet fa-3x mb-3 opacity-25"></i>
+                        <p class="mb-0">Tidak ada data ditemukan</p>
+                    </div>
+                    @endforelse
+                </div>
             </div>
         </div>
     </div>
@@ -160,97 +422,102 @@
 </button>
 
 <!-- Transaction Modal -->
-<div class="modal fade" id="transactionModal" tabindex="-1">
-    <div class="modal-dialog">
+<div class="modal fade modal-modern" id="transactionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-bottom">
         <div class="modal-content">
             <form id="transactionForm" method="POST" action="{{ route('transactions.store') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formMethod" value="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">Tambah Transaksi</h5>
+                <input type="hidden" name="tipe" id="tipeValue" value="pemasukan">
+                
+                <div class="modal-header modal-header-modern">
+                    <h5 class="modal-title fw-bold" id="modalTitle">Tambah Transaksi</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body modal-body-modern">
                     @if($wallets->isEmpty())
-                    <div class="alert alert-warning">
+                    <div class="alert alert-warning rounded-4 border-0 shadow-sm">
                         <i class="fas fa-exclamation-triangle me-2"></i>Buat minimal satu dompet di Pengaturan terlebih dahulu!
                     </div>
                     @else
-                    <div class="mb-3">
-                        <label class="form-label">Pilih Dompet</label>
-                        <select name="wallet_id" id="walletSelect" class="form-select @error('wallet_id') is-invalid @enderror" required onchange="updateWalletBalance()">
-                            @foreach($wallets as $wallet)
-                            @php
-                                $walletBalance = $wallet->transactions->sum(function($t) {
-                                    return $t->tipe === 'pemasukan' ? $t->jumlah : -$t->jumlah;
-                                });
-                            @endphp
-                            <option value="{{ $wallet->id }}" data-balance="{{ $walletBalance }}">
-                                {{ $wallet->name }} (Saldo: Rp {{ number_format($walletBalance, 0, ',', '.') }})
-                            </option>
-                            @endforeach
-                        </select>
-                        @error('wallet_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="row">
-                        <div class="col-6 mb-3">
-                            <label class="form-label">Tanggal</label>
-                            <input type="date" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal', date('Y-m-d')) }}" required>
-                            @error('tanggal')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-6 mb-3">
-                            <label class="form-label">Tipe</label>
-                            <select name="tipe" id="tipeSelect" class="form-select" required onchange="updateWalletBalance()">
-                                <option value="pemasukan">Pemasukan (+)</option>
-                                <option value="pengeluaran">Pengeluaran (-)</option>
-                            </select>
-                        </div>
-                    </div>
                     
-                    <!-- Wallet Balance Info (shows for pengeluaran) -->
-                    <div class="mb-3 d-none" id="balanceInfo">
-                        <div class="alert alert-info py-2 mb-0 d-flex justify-content-between align-items-center">
-                            <span>
-                                <i class="fas fa-wallet me-2"></i>
-                                Saldo tersedia: <strong id="availableBalance">Rp 0</strong>
-                            </span>
-                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="fillMaxAmount()">
-                                <i class="fas fa-arrow-up me-1"></i>MAX
-                            </button>
-                        </div>
+                    <!-- Segmented Control Tip (Income/Expense) -->
+                    <div class="type-selector">
+                        <button type="button" class="type-btn active" data-type="pemasukan">PEMASUKAN</button>
+                        <button type="button" class="type-btn" data-type="pengeluaran">PENGELUARAN</button>
                     </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Keterangan</label>
-                        <input type="text" name="keterangan" class="form-control @error('keterangan') is-invalid @enderror" placeholder="Contoh: Gaji, Belanja Sayur" value="{{ old('keterangan') }}" required>
-                        @error('keterangan')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Jumlah (Rp)</label>
-                        <div class="input-group has-validation">
-                            <span class="input-group-text fw-bold">Rp</span>
-                            <input type="text" name="jumlah_display" id="jumlahDisplay" class="form-control fs-5 fw-bold @error('jumlah') is-invalid @enderror" placeholder="0" value="{{ old('jumlah_display') }}" required autocomplete="off">
-                            <input type="hidden" name="jumlah" id="jumlahReal" value="{{ old('jumlah') }}">
-                            @error('jumlah')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+
+                    <!-- Prominent Amount Input -->
+                    <div class="amount-input-group">
+                        <label class="modern-form-label">Nominal Transaksi</label>
+                        <div class="amount-display-container">
+                            <span>Rp</span>
+                            <input type="text" id="jumlahDisplay" class="amount-hidden-input" placeholder="0" autocomplete="off">
+                            <input type="hidden" name="jumlah" id="jumlahReal">
                         </div>
                         <small class="text-danger d-none" id="balanceWarning">
                             <i class="fas fa-exclamation-triangle me-1"></i>Jumlah melebihi saldo yang tersedia!
                         </small>
                     </div>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="modern-form-label">Keterangan</label>
+                            <div class="modern-input-icon">
+                                <i class="fas fa-tag"></i>
+                                <input type="text" name="keterangan" class="form-control" placeholder="Contoh: Gaji, Belanja Sayur" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-12">
+                            <label class="modern-form-label">Dompet</label>
+                            <div class="modern-input-icon">
+                                <i class="fas fa-wallet"></i>
+                                <select name="wallet_id" id="walletSelect" class="form-select" required onchange="updateWalletBalance()">
+                                    @foreach($wallets as $wallet)
+                                    @php
+                                        $walletBalance = $wallet->transactions->sum(function($t) {
+                                            return $t->tipe === 'pemasukan' ? $t->jumlah : -$t->jumlah;
+                                        });
+                                    @endphp
+                                    <option value="{{ $wallet->id }}" data-balance="{{ $walletBalance }}">
+                                        {{ $wallet->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-12">
+                            <label class="modern-form-label">Tanggal</label>
+                            <div class="modern-input-icon">
+                                <i class="fas fa-calendar"></i>
+                                <input type="date" name="tanggal" class="form-control" value="{{ date('Y-m-d') }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wallet Balance Info (shows for pengeluaran) -->
+                    <div class="mt-4 d-none" id="balanceInfo">
+                        <div class="p-3 bg-light rounded-4 d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-white p-2 rounded-3 me-3 text-primary shadow-sm">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div>
+                                    <div class="small text-muted">Saldo Tersedia</div>
+                                    <div class="fw-bold" id="availableBalance">Rp 0</div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="fillMaxAmount()">MAX</button>
+                        </div>
+                    </div>
                     @endif
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <div class="modal-footer p-3 border-0">
+                    <button type="button" class="btn btn-link text-muted text-decoration-none px-4" data-bs-dismiss="modal">Batal</button>
                     @if(!$wallets->isEmpty())
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Simpan</button>
+                    <button type="submit" class="btn btn-primary px-5 py-2 fw-bold" style="border-radius: 12px;">SIMPAN</button>
                     @endif
                 </div>
             </form>
@@ -360,39 +627,84 @@
 </div>
 
 
-<!-- Statistics Modal -->
 <div class="modal fade" id="statisticsModal" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content bg-light">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold"><i class="fas fa-chart-line me-2 text-primary"></i>Analisis & Statistik</h5>
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
+            <div class="modal-header border-0 pb-0 px-4 pt-4">
+                <h5 class="modal-title fw-bold">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary-custom text-white p-2 rounded-3 me-3 shadow-sm">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        Analisis & Statistik
+                    </div>
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body pb-4">
-                <div class="row g-3">
+            <div class="modal-body p-4">
+                <div class="row g-3 mb-4">
+                    <!-- Global Mini Stats -->
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-card-mini stat-bg-purple shadow-sm">
+                            <i class="fas fa-wallet"></i>
+                            <div class="val">Rp {{ number_format($balance, 0, ',', '.') }}</div>
+                            <div class="lbl">Total Saldo</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-card-mini stat-bg-green shadow-sm">
+                            <i class="fas fa-arrow-down"></i>
+                            <div class="val">Rp {{ number_format($totalIn, 0, ',', '.') }}</div>
+                            <div class="lbl">Total Masuk</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-card-mini stat-bg-red shadow-sm">
+                            <i class="fas fa-arrow-up"></i>
+                            <div class="val">Rp {{ number_format($totalOut, 0, ',', '.') }}</div>
+                            <div class="lbl">Total Keluar</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-card-mini bg-dark shadow-sm">
+                            <i class="fas fa-exchange-alt text-secondary"></i>
+                            <div class="val">{{ $statistics['totalTransactions'] }}</div>
+                            <div class="lbl">Transaksi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
                     <!-- Monthly Trend Chart -->
-                    <div class="col-lg-8">
-                        <div class="card shadow-sm h-100">
-                            <div class="card-header bg-white">
-                                <h6 class="mb-0 fw-bold"><i class="fas fa-chart-line me-2 text-primary"></i>Trend 6 Bulan Terakhir</h6>
+                    <div class="col-lg-8 col-xl-7">
+                        <div class="card border-0 shadow-sm h-100 rounded-4">
+                            <div class="card-header bg-white border-0 pt-3 pb-0 px-4">
+                                <h6 class="mb-0 fw-bold border-start border-primary border-4 ps-3">Trend 6 Bulan Terakhir</h6>
                             </div>
-                            <div class="card-body">
-                                <canvas id="trendChart" height="200"></canvas>
+                            <div class="card-body px-4 pb-4">
+                                <div style="position: relative; height:300px;">
+                                    <canvas id="trendChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Top Pengeluaran -->
-                    <div class="col-lg-4">
-                        <div class="card shadow-sm h-100">
-                            <div class="card-header bg-white">
-                                <h6 class="mb-0 fw-bold"><i class="fas fa-chart-pie me-2 text-danger"></i>Top 5 Pengeluaran</h6>
+                    <div class="col-lg-4 col-xl-5">
+                        <div class="card border-0 shadow-sm h-100 rounded-4">
+                            <div class="card-header bg-white border-0 pt-3 pb-0 px-4">
+                                <h6 class="mb-0 fw-bold border-start border-danger border-4 ps-3">Top 5 Pengeluaran</h6>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body px-4 pb-4 d-flex align-items-center">
                                 @if($statistics['topPengeluaran']->isEmpty())
-                                <p class="text-muted text-center py-4">Belum ada data pengeluaran</p>
+                                <div class="text-center w-100 py-5">
+                                    <i class="fas fa-chart-pie fa-3x text-light mb-3"></i>
+                                    <p class="text-muted">Belum ada data</p>
+                                </div>
                                 @else
-                                <canvas id="topChart" height="200"></canvas>
+                                <div style="position: relative; height:300px; width:100%;">
+                                    <canvas id="topChart"></canvas>
+                                </div>
                                 @endif
                             </div>
                         </div>
@@ -400,27 +712,27 @@
 
                     <!-- Month Comparison -->
                     <div class="col-lg-6">
-                        <div class="card shadow-sm h-100">
-                            <div class="card-header bg-white">
-                                <h6 class="mb-0 fw-bold"><i class="fas fa-calendar-alt me-2 text-info"></i>Perbandingan Periode</h6>
+                        <div class="card border-0 shadow-sm h-100 rounded-4">
+                            <div class="card-header bg-white border-0 pt-3 pb-0 px-4">
+                                <h6 class="mb-0 fw-bold border-start border-info border-4 ps-3">Perbandingan Periode</h6>
                             </div>
-                            <div class="card-body">
-                                <div class="row g-3">
+                            <div class="card-body p-4">
+                                <div class="row g-3 mb-4">
                                     <div class="col-6">
-                                        <div class="border rounded p-3 text-center">
-                                            <small class="text-muted">Bulan Lalu</small>
-                                            <div class="mt-2">
-                                                <div class="text-success-custom small"><i class="fas fa-arrow-up me-1"></i>{{ number_format($statistics['lastMonth']['pemasukan'], 0, ',', '.') }}</div>
-                                                <div class="text-danger-custom small"><i class="fas fa-arrow-down me-1"></i>{{ number_format($statistics['lastMonth']['pengeluaran'], 0, ',', '.') }}</div>
+                                        <div class="p-4 rounded-4 text-center" style="background: #f8fafc; border: 1px dashed #e2e8f0;">
+                                            <div class="small text-muted mb-2">BULAN LALU</div>
+                                            <div class="d-flex flex-column gap-1">
+                                                <div class="fw-bold text-success-custom">📥 Rp {{ number_format($statistics['lastMonth']['pemasukan'], 0, ',', '.') }}</div>
+                                                <div class="fw-bold text-danger-custom">📤 Rp {{ number_format($statistics['lastMonth']['pengeluaran'], 0, ',', '.') }}</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <div class="border rounded p-3 text-center bg-light">
-                                            <small class="text-muted">Bulan Ini</small>
-                                            <div class="mt-2">
-                                                <div class="text-success-custom small"><i class="fas fa-arrow-up me-1"></i>{{ number_format($statistics['thisMonth']['pemasukan'], 0, ',', '.') }}</div>
-                                                <div class="text-danger-custom small"><i class="fas fa-arrow-down me-1"></i>{{ number_format($statistics['thisMonth']['pengeluaran'], 0, ',', '.') }}</div>
+                                        <div class="p-4 rounded-4 text-center bg-white shadow-sm" style="border: 1px solid #f1f5f9;">
+                                            <div class="small text-muted mb-2">BULAN INI</div>
+                                            <div class="d-flex flex-column gap-1">
+                                                <div class="fw-bold text-success-custom">📥 Rp {{ number_format($statistics['thisMonth']['pemasukan'], 0, ',', '.') }}</div>
+                                                <div class="fw-bold text-danger-custom">📤 Rp {{ number_format($statistics['thisMonth']['pengeluaran'], 0, ',', '.') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -430,11 +742,11 @@
                                     $thisNetProfit = $statistics['thisMonth']['pemasukan'] - $statistics['thisMonth']['pengeluaran'];
                                     $profitChange = $lastNetProfit != 0 ? (($thisNetProfit - $lastNetProfit) / abs($lastNetProfit)) * 100 : ($thisNetProfit > 0 ? 100 : 0);
                                 @endphp
-                                <div class="text-center mt-3">
-                                    <span class="badge {{ $profitChange >= 0 ? 'bg-success' : 'bg-danger' }} fs-6">
-                                        <i class="fas {{ $profitChange >= 0 ? 'fa-trending-up' : 'fa-trending-down' }} me-1"></i>
-                                        {{ $profitChange >= 0 ? '+' : '' }}{{ number_format($profitChange, 1) }}% Net Profit
-                                    </span>
+                                <div class="text-center p-3 rounded-4 {{ $profitChange >= 0 ? 'bg-success-light' : 'bg-danger-light' }}" style="background-color: {{ $profitChange >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)' }};">
+                                    <div class="h5 fw-bold mb-0 {{ $profitChange >= 0 ? 'text-success' : 'text-danger' }}">
+                                        <i class="fas {{ $profitChange >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down' }} me-2"></i>
+                                        {{ $profitChange >= 0 ? '+' : '' }}{{ number_format($profitChange, 1) }}% <small class="text-dark">Net Profit</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -442,32 +754,36 @@
 
                     <!-- Wallet Stats -->
                     <div class="col-lg-6">
-                        <div class="card shadow-sm h-100">
-                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                                <h6 class="mb-0 fw-bold"><i class="fas fa-wallet me-2 text-purple"></i>Statistik per Dompet</h6>
-                                <span class="badge bg-secondary">{{ $statistics['totalTransactions'] }} transaksi</span>
+                        <div class="card border-0 shadow-sm h-100 rounded-4">
+                            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3 pb-0 px-4">
+                                <h6 class="mb-0 fw-bold border-start border-purple border-4 ps-3">Statistik Dompet</h6>
                             </div>
-                            <div class="card-body">
-                                <div class="wallet-list">
+                            <div class="card-body p-4">
+                                <div class="wallet-list-modern" style="max-height: 250px; overflow-y: auto;">
                                     @forelse($statistics['walletStats'] as $ws)
-                                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
-                                        <div>
-                                            <h6 class="mb-1 fw-bold text-dark">{{ $ws->name }}</h6>
-                                            <span class="badge bg-light text-dark border">{{ $ws->transactions_count }} Transaksi</span>
+                                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 bg-light rounded-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-white p-2 rounded-3 me-3 text-purple shadow-sm fw-bold">
+                                                {{ substr($ws->name, 0, 1) }}
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark">{{ $ws->name }}</div>
+                                                <small class="text-muted">{{ $ws->transactions_count }} Transaksi</small>
+                                            </div>
                                         </div>
                                         <div class="text-end">
-                                            <div class="text-success small fw-bold mb-1">
-                                                <i class="fas fa-arrow-up me-1"></i>{{ number_format($ws->total_pemasukan ?? 0, 0, ',', '.') }}
+                                            <div class="text-success small fw-bold mb-0">
+                                                +{{ number_format($ws->total_pemasukan ?? 0, 0, ',', '.') }}
                                             </div>
                                             <div class="text-danger small fw-bold">
-                                                <i class="fas fa-arrow-down me-1"></i>{{ number_format($ws->total_pengeluaran ?? 0, 0, ',', '.') }}
+                                                -{{ number_format($ws->total_pengeluaran ?? 0, 0, ',', '.') }}
                                             </div>
                                         </div>
                                     </div>
                                     @empty
                                     <div class="text-center text-muted py-4">
-                                        <i class="fas fa-wallet fa-2x mb-2 text-secondary"></i>
-                                        <p class="mb-0">Belum ada data dompet.</p>
+                                        <i class="fas fa-wallet fa-2x mb-2 text-secondary opacity-25"></i>
+                                        <p class="mb-0">Belum ada data</p>
                                     </div>
                                     @endforelse
                                 </div>
@@ -499,6 +815,10 @@ function resetForm() {
     document.getElementById('formMethod').value = 'POST';
     document.getElementById('modalTitle').textContent = 'Tambah Transaksi';
     form.reset();
+    
+    // Reset Segmented UI
+    document.querySelector('.type-btn[data-type="pemasukan"]').click();
+    
     const today = new Date();
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -508,7 +828,6 @@ function resetForm() {
     const dateInput = form.querySelector('[name="tanggal"]');
     dateInput.value = todayString;
     
-    // Update flatpickr instance if exists
     if (dateInput._flatpickr) {
         dateInput._flatpickr.setDate(todayString);
     }
@@ -522,11 +841,12 @@ function editTransaction(trx) {
     document.getElementById('formMethod').value = 'PUT';
     document.getElementById('modalTitle').textContent = 'Edit Transaksi';
     
-    // Use IDs for better reliability
+    // Update Segmented UI
+    document.querySelector(`.type-btn[data-type="${trx.tipe}"]`).click();
+
     const walletSelect = document.getElementById('walletSelect');
     if (walletSelect) {
         walletSelect.value = trx.wallet_id;
-        // Trigger change event to update balance if needed
         walletSelect.dispatchEvent(new Event('change'));
     }
 
@@ -535,23 +855,39 @@ function editTransaction(trx) {
         tanggalInput.value = trx.tanggal.split('T')[0];
     }
 
-    const tipeSelect = document.getElementById('tipeSelect');
-    if (tipeSelect) {
-        tipeSelect.value = trx.tipe;
-        tipeSelect.dispatchEvent(new Event('change'));
-    }
-
     const ketInput = form.querySelector('[name="keterangan"]');
     if (ketInput) ketInput.value = trx.keterangan;
     
-    // Parse integer to avoid decimal issues (e.g. 50000.00 -> 50.000.00 -> 5.000.000 bug)
     setJumlahValue(parseInt(trx.jumlah));
     
     new bootstrap.Modal(document.getElementById('transactionModal')).show();
 }
 
+// Segmented Control Handler
+document.querySelectorAll('.type-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const type = this.dataset.type;
+        document.getElementById('tipeValue').value = type;
+        
+        // Update styling based on type
+        const displayContainer = document.querySelector('.amount-display-container');
+        if (type === 'pemasukan') {
+            displayContainer.style.color = '#10b981';
+        } else {
+            displayContainer.style.color = '#ef4444';
+        }
+        
+        updateWalletBalance();
+    });
+});
+
 // Initialize filter display
 toggleFilterInputs();
+
+// ... existing Chart.js code ... (rest of search/charts)
+
 
 // Chart.js - Monthly Trend
 const trendCtx = document.getElementById('trendChart');
@@ -670,21 +1006,21 @@ let currentWalletBalance = 0;
 
 function updateWalletBalance() {
     const walletSelect = document.getElementById('walletSelect');
-    const tipeSelect = document.getElementById('tipeSelect');
+    const tipeVal = document.getElementById('tipeValue') ? document.getElementById('tipeValue').value : 'pemasukan';
     const balanceInfo = document.getElementById('balanceInfo');
     const availableBalance = document.getElementById('availableBalance');
     
-    if (!walletSelect || !tipeSelect) return;
+    if (!walletSelect) return;
     
     const selectedOption = walletSelect.options[walletSelect.selectedIndex];
     currentWalletBalance = parseInt(selectedOption.dataset.balance) || 0;
     
     // Show balance info only for pengeluaran
-    if (tipeSelect.value === 'pengeluaran') {
-        balanceInfo.classList.remove('d-none');
-        availableBalance.textContent = 'Rp ' + formatRupiah(currentWalletBalance);
+    if (tipeVal === 'pengeluaran') {
+        if (balanceInfo) balanceInfo.classList.remove('d-none');
+        if (availableBalance) availableBalance.textContent = 'Rp ' + formatRupiah(currentWalletBalance);
     } else {
-        balanceInfo.classList.add('d-none');
+        if (balanceInfo) balanceInfo.classList.add('d-none');
     }
     
     // Validate current input
@@ -699,13 +1035,14 @@ function fillMaxAmount() {
 }
 
 function validateBalance() {
-    const tipeSelect = document.getElementById('tipeSelect');
+    const tipeVal = document.getElementById('tipeValue') ? document.getElementById('tipeValue').value : 'pemasukan';
     const balanceWarning = document.getElementById('balanceWarning');
-    const jumlahValue = parseInt(jumlahReal.value) || 0;
+    const jumlahRealInp = document.getElementById('jumlahReal');
+    const jumlahValue = jumlahRealInp ? (parseInt(jumlahRealInp.value) || 0) : 0;
     
-    if (!tipeSelect || !balanceWarning) return;
+    if (!balanceWarning) return;
     
-    if (tipeSelect.value === 'pengeluaran' && jumlahValue > currentWalletBalance) {
+    if (tipeVal === 'pengeluaran' && jumlahValue > currentWalletBalance) {
         balanceWarning.classList.remove('d-none');
     } else {
         balanceWarning.classList.add('d-none');
@@ -717,7 +1054,7 @@ if (jumlahDisplay) {
     jumlahDisplay.addEventListener('input', function(e) {
         let value = this.value.replace(/[^0-9]/g, '');
         this.value = formatRupiah(value);
-        jumlahReal.value = value;
+        if (jumlahReal) jumlahReal.value = value;
         validateBalance();
     });
 }
@@ -746,11 +1083,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Form submit validation
 document.getElementById('transactionForm')?.addEventListener('submit', function(e) {
-    const tipeSelect = document.getElementById('tipeSelect');
+    const tipeValue = document.getElementById('tipeValue').value;
     const jumlahValue = parseInt(jumlahReal.value) || 0;
     
     // Check if pengeluaran exceeds balance
-    if (tipeSelect && tipeSelect.value === 'pengeluaran' && jumlahValue > currentWalletBalance) {
+    if (tipeValue === 'pengeluaran' && jumlahValue > currentWalletBalance) {
         e.preventDefault();
         
         // Show Bootstrap Modal
@@ -778,7 +1115,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Trend Chart
     if(document.getElementById('trendChart')) {
         new Chart(document.getElementById('trendChart'), {
-            type: 'bar', // Changed to Bar for better comparison clarity
+            type: 'bar',
             data: {
                 labels: stats.monthlyTrend.map(d => {
                     const date = new Date(d.month + '-01');
@@ -788,50 +1125,58 @@ document.addEventListener('DOMContentLoaded', function() {
                     {
                         label: 'Pemasukan',
                         data: stats.monthlyTrend.map(d => d.pemasukan),
-                        borderColor: '#2ecc71',
-                        backgroundColor: 'rgba(46, 204, 113, 0.7)',
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.7)',
                         borderWidth: 1,
-                        borderRadius: 4,
+                        borderRadius: 8,
+                        barThickness: 'flex',
+                        maxBarThickness: 40,
                     },
                     {
                         label: 'Pengeluaran',
                         data: stats.monthlyTrend.map(d => d.pengeluaran),
-                        borderColor: '#e74c3c',
-                        backgroundColor: 'rgba(231, 76, 60, 0.7)',
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.7)',
                         borderWidth: 1,
-                        borderRadius: 4,
+                        borderRadius: 8,
+                        barThickness: 'flex',
+                        maxBarThickness: 40,
                     }
                 ]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 interaction: {
                     mode: 'index',
                     intersect: false,
                 },
                 plugins: {
-                    legend: { position: 'top' },
+                    legend: { 
+                        position: 'top',
+                        labels: { usePointStyle: true, padding: 20 }
+                    },
                     tooltip: {
+                        padding: 12,
+                        backgroundColor: 'rgba(0,0,0,0.8)',
                         callbacks: {
                             label: function(context) {
                                 let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += formatCurrency(context.parsed.y);
-                                }
+                                if (label) label += ': ';
+                                if (context.parsed.y !== null) label += formatCurrency(context.parsed.y);
                                 return label;
                             }
                         }
                     }
                 },
                 scales: {
+                    x: { grid: { display: false } },
                     y: {
                         beginAtZero: true,
+                        grid: { borderDash: [5, 5], drawBorder: false },
                         ticks: {
                             callback: function(value) {
-                                return formatCurrency(value);
+                                return new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(value);
                             }
                         }
                     }
@@ -849,26 +1194,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 datasets: [{
                     data: stats.topPengeluaran.map(d => d.total),
                     backgroundColor: [
-                        '#e74c3c', '#e67e22', '#f1c40f', '#9b59b6', '#3498db', '#2ecc71'
+                        '#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#10b981', '#6366f1'
                     ],
-                    borderWidth: 0
+                    weight: 1,
+                    borderWidth: 4,
+                    borderColor: '#ffffff',
+                    hoverOffset: 15
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                cutout: '70%',
                 plugins: {
-                    legend: { position: 'right', labels: { boxWidth: 12 } },
+                    legend: { 
+                        position: 'bottom', 
+                        labels: { 
+                            boxWidth: 10, 
+                            padding: 15,
+                            usePointStyle: true
+                        } 
+                    },
                     tooltip: {
+                        padding: 12,
                         callbacks: {
                             label: function(context) {
                                 let label = context.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed !== null) {
-                                    label += formatCurrency(context.parsed);
-                                }
+                                if (label) label += ': ';
+                                if (context.parsed !== null) label += formatCurrency(context.parsed);
                                 return label;
                             }
                         }

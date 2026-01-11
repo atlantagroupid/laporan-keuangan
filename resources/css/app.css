@@ -2,92 +2,214 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Premium Auth Styles */
-.brand-gradient {
-    /* Dashboard Theme Gradient */
-    background: linear-gradient(135deg, #555691 0%, #253650 100%);
+/* Premium Textured Design System - Primary Deep */
+:root {
+    --primary-purple: #555691;
+    --primary-accent: #7c7dbf;
+    --vibrant-rose: rgba(225, 29, 72, 0.15);
+    --vibrant-blue: rgba(14, 165, 233, 0.15);
+    --vibrant-purple: rgba(85, 86, 145, 0.25);
+    --glass-background: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(255, 255, 255, 0.6);
+}
+
+html,
+body {
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+body {
+    min-height: 100vh;
+}
+
+/* Modern Minimalist Input */
+.modern-input {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 12px 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modern-input:focus {
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 4px rgba(85, 86, 145, 0.15);
+    transform: translateY(-1px);
+    outline: none;
+}
+
+/* Premium Shimmer Button */
+.modern-btn {
+    background: linear-gradient(135deg, #555691 0%, #3e3f70 100%);
+    color: white;
+    font-weight: 600;
+    border-radius: 14px;
+    padding: 13px 24px;
+    transition: all 0.3s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
     position: relative;
     overflow: hidden;
 }
 
-.brand-gradient::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image:
-        radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.1) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(255, 255, 255, 0.1) 0px, transparent 50%);
-    pointer-events: none;
-}
-
-/* Glass effect for overlay elements inside brand section */
-.glass-overlay {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Modern Input - Cleaner & Professional */
-.modern-input {
-    background: #f8fafc;
-    /* Slate-50 */
-    border: 1px solid #e2e8f0;
-    /* Slate-200 */
-    transition: all 0.2s ease;
-}
-
-.modern-input:focus {
-    background: #ffffff;
-    /* Dashboard Primary Purple */
-    border-color: #555691;
-    box-shadow: 0 0 0 3px rgba(85, 86, 145, 0.15);
-    outline: none;
-}
-
-/* Modern Button - Professional & Solid */
-.modern-btn {
-    /* Dashboard Theme Gradient */
-    background: linear-gradient(135deg, #555691 0%, #253650 100%);
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 6px -1px rgba(37, 54, 80, 0.3);
-}
-
 .modern-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px -5px rgba(85, 86, 145, 0.4);
     filter: brightness(1.1);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 8px -1px rgba(37, 54, 80, 0.4);
+}
+
+.modern-btn::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 20%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(30deg);
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.modern-btn:hover::after {
+    left: 120%;
 }
 
 .modern-btn:active {
     transform: translateY(0);
 }
 
-/* Modern Link */
+/* Modern Minimalist Checkbox */
+.modern-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #cbd5e1;
+    border-radius: 7px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    display: inline-block;
+}
+
+.modern-checkbox:checked {
+    background: var(--primary-purple);
+    border-color: var(--primary-purple);
+}
+
+.modern-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-weight: 900;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Premium Minimalist Link */
 .modern-link {
-    color: #555691;
-    /* Dashboard Primary Purple */
-    font-weight: 500;
-    transition: color 0.2s;
+    color: var(--primary-purple);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
 
 .modern-link:hover {
-    color: #253650;
-    /* Dashboard Dark */
+    color: #3e3f70;
     text-decoration: underline;
 }
 
-/* Form Container Transition */
-.form-enter {
-    animation: fadeSlideUp 0.5s ease-out forwards;
+/* High-End Frosted Pearl Glass Card */
+.glass-card-vibrant {
+    background: var(--glass-background);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+        0 30px 60px -12px rgba(37, 54, 80, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+    border-radius: 30px;
+    position: relative;
+    z-index: 10;
 }
 
-@keyframes fadeSlideUp {
+/* Premium Aura Glows (Boosted) */
+.aura-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.25;
+    z-index: 0;
+    pointer-events: none;
+    animation: auraPulse 15s ease-in-out infinite alternate;
+}
+
+@keyframes auraPulse {
+    from {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.2;
+    }
+
+    to {
+        transform: scale(1.2) translate(5%, 5%);
+        opacity: 0.35;
+    }
+}
+
+/* Vibrant Mesh Background with Texture */
+.vibrant-mesh-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 0% 0%, var(--vibrant-purple) 0, transparent 60%),
+        radial-gradient(circle at 100% 0%, var(--vibrant-blue) 0, transparent 60%),
+        radial-gradient(circle at 60% 100%, var(--vibrant-rose) 0, transparent 60%),
+        #f8f9ff;
+}
+
+/* Grainy Texture Overlay */
+.vibrant-mesh-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.25;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+}
+
+/* Subtle Geometric Depth */
+.vibrant-mesh-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+    background-image:
+        linear-gradient(rgba(85, 86, 145, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(85, 86, 145, 0.2) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
+    pointer-events: none;
+}
+
+/* Subtle Entrance Animation */
+@keyframes slideUpFade {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(30px);
     }
 
     to {
@@ -96,206 +218,11 @@
     }
 }
 
-@keyframes float-delayed {
-
-    0%,
-    100% {
-        transform: translateY(0px) rotate(0deg);
-    }
-
-    50% {
-        transform: translateY(-15px) rotate(-5deg);
-    }
+.animate-entrance {
+    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes gradient-shift {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-@keyframes pulse-glow {
-
-    0%,
-    100% {
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-    }
-
-    50% {
-        box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
-    }
-}
-
-/* Glassmorphism Card */
-.glass-card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.glass-card-solid {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-/* Animated Background */
-.auth-gradient-bg {
-    background: linear-gradient(-45deg, #1e3a8a, #1d4ed8, #2563eb, #0ea5e9);
-    background-size: 400% 400%;
-    animation: gradient-shift 15s ease infinite;
-}
-
-/* Floating Shapes */
-.floating-shape {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.1;
-    pointer-events: none;
-}
-
-.floating-shape-1 {
-    width: 300px;
-    height: 300px;
-    background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
-    top: -100px;
-    right: -100px;
-    animation: float 8s ease-in-out infinite;
-}
-
-.floating-shape-2 {
-    width: 200px;
-    height: 200px;
-    background: linear-gradient(135deg, #0284c7, #06b6d4);
-    bottom: -50px;
-    left: -50px;
-    animation: float-delayed 10s ease-in-out infinite;
-}
-
-.floating-shape-3 {
-    width: 150px;
-    height: 150px;
-    background: linear-gradient(135deg, #3b82f6, #38bdf8);
-    top: 50%;
-    left: 10%;
-    animation: float 12s ease-in-out infinite;
-}
-
-/* Modern Input Styling */
-.modern-input {
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid rgba(209, 213, 219, 0.5);
-    transition: all 0.3s ease;
-}
-
-.modern-input:focus {
-    background: rgba(255, 255, 255, 1);
-    border-color: #2563eb;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-}
-
-/* Modern Button */
-.modern-btn {
-    background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.modern-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(29, 78, 216, 0.4);
-}
-
-.modern-btn:active {
-    transform: translateY(0);
-}
-
-.modern-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
-}
-
-.modern-btn:hover::before {
-    left: 100%;
-}
-
-/* Modern Checkbox */
-.modern-checkbox {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #d1d5db;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.9);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-}
-
-.modern-checkbox:checked {
-    background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
-    border-color: #1d4ed8;
-}
-
-.modern-checkbox:checked::after {
-    content: '✓';
-    position: absolute;
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.modern-checkbox:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
-}
-
-/* Modern Link */
-.modern-link {
-    color: #2563eb;
-    text-decoration: none;
-    position: relative;
-    transition: color 0.2s ease;
-}
-
-.modern-link::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #1d4ed8, #0ea5e9);
-    transition: width 0.3s ease;
-}
-
-.modern-link:hover {
-    color: #1d4ed8;
-}
-
-.modern-link:hover::after {
-    width: 100%;
+/* Unified Brand Gradient */
+.brand-gradient-subtle {
+    background: linear-gradient(135deg, #555691 0%, #253650 100%);
 }
