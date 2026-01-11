@@ -1,0 +1,301 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Premium Auth Styles */
+.brand-gradient {
+    /* Dashboard Theme Gradient */
+    background: linear-gradient(135deg, #555691 0%, #253650 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(255, 255, 255, 0.1) 0px, transparent 50%);
+    pointer-events: none;
+}
+
+/* Glass effect for overlay elements inside brand section */
+.glass-overlay {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Modern Input - Cleaner & Professional */
+.modern-input {
+    background: #f8fafc;
+    /* Slate-50 */
+    border: 1px solid #e2e8f0;
+    /* Slate-200 */
+    transition: all 0.2s ease;
+}
+
+.modern-input:focus {
+    background: #ffffff;
+    /* Dashboard Primary Purple */
+    border-color: #555691;
+    box-shadow: 0 0 0 3px rgba(85, 86, 145, 0.15);
+    outline: none;
+}
+
+/* Modern Button - Professional & Solid */
+.modern-btn {
+    /* Dashboard Theme Gradient */
+    background: linear-gradient(135deg, #555691 0%, #253650 100%);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(37, 54, 80, 0.3);
+}
+
+.modern-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 8px -1px rgba(37, 54, 80, 0.4);
+}
+
+.modern-btn:active {
+    transform: translateY(0);
+}
+
+/* Modern Link */
+.modern-link {
+    color: #555691;
+    /* Dashboard Primary Purple */
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.modern-link:hover {
+    color: #253650;
+    /* Dashboard Dark */
+    text-decoration: underline;
+}
+
+/* Form Container Transition */
+.form-enter {
+    animation: fadeSlideUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float-delayed {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(-5deg);
+    }
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+    }
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-card-solid {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Animated Background */
+.auth-gradient-bg {
+    background: linear-gradient(-45deg, #1e3a8a, #1d4ed8, #2563eb, #0ea5e9);
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
+}
+
+/* Floating Shapes */
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.floating-shape-1 {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+    top: -100px;
+    right: -100px;
+    animation: float 8s ease-in-out infinite;
+}
+
+.floating-shape-2 {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #0284c7, #06b6d4);
+    bottom: -50px;
+    left: -50px;
+    animation: float-delayed 10s ease-in-out infinite;
+}
+
+.floating-shape-3 {
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, #3b82f6, #38bdf8);
+    top: 50%;
+    left: 10%;
+    animation: float 12s ease-in-out infinite;
+}
+
+/* Modern Input Styling */
+.modern-input {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(209, 213, 219, 0.5);
+    transition: all 0.3s ease;
+}
+
+.modern-input:focus {
+    background: rgba(255, 255, 255, 1);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* Modern Button */
+.modern-btn {
+    background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(29, 78, 216, 0.4);
+}
+
+.modern-btn:active {
+    transform: translateY(0);
+}
+
+.modern-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.modern-btn:hover::before {
+    left: 100%;
+}
+
+/* Modern Checkbox */
+.modern-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d1d5db;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.modern-checkbox:checked {
+    background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+    border-color: #1d4ed8;
+}
+
+.modern-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modern-checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+/* Modern Link */
+.modern-link {
+    color: #2563eb;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.modern-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #1d4ed8, #0ea5e9);
+    transition: width 0.3s ease;
+}
+
+.modern-link:hover {
+    color: #1d4ed8;
+}
+
+.modern-link:hover::after {
+    width: 100%;
+}

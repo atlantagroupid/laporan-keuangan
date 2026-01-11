@@ -1,0 +1,200 @@
+/* Custom Styles for Laporan Keuangan */
+
+:root {
+    --primary: #4f46e5;
+    --secondary: #0ea5e9;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --purple: #8b5cf6;
+}
+
+/* Header Gradient */
+.app-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 15px;
+    box-shadow: 0 5px 15px -5px rgba(79, 70, 229, 0.4);
+}
+
+/* Stat Cards */
+.stat-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* Custom Colors */
+.text-success-custom { color: var(--success) !important; }
+.text-danger-custom { color: var(--danger) !important; }
+.text-primary-custom { color: var(--primary) !important; }
+
+/* Badge Wallet */
+.badge-wallet {
+    background: var(--purple);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* FAB Button */
+.fab-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5);
+    font-size: 22px;
+    z-index: 1000;
+    transition: transform 0.3s;
+}
+
+.fab-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+    background: var(--primary);
+    color: white;
+}
+
+/* Table Styling */
+.table-transactions {
+    min-width: 800px;
+}
+
+.table-transactions th {
+    background: #f9fafb;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.table-transactions td {
+    vertical-align: middle;
+}
+
+/* Export Buttons */
+.btn-excel {
+    background: #107c41;
+    border-color: #107c41;
+}
+
+.btn-excel:hover {
+    background: #0a5c2f;
+    border-color: #0a5c2f;
+}
+
+.btn-pdf {
+    background: #b30b00;
+    border-color: #b30b00;
+}
+
+.btn-pdf:hover {
+    background: #8a0800;
+    border-color: #8a0800;
+}
+
+/* Filter Dynamic Date */
+.dynamic-date {
+    display: none;
+}
+
+.dynamic-date.show {
+    display: block;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 14px;
+    border: none;
+}
+
+/* Admin User Status Badge */
+.status-active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-inactive {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stat-card {
+        margin-bottom: 10px;
+    }
+    
+    .fab-btn {
+        bottom: 15px;
+        right: 15px;
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Sidebar Navigation */
+.nav-link.active {
+    background: rgba(79, 70, 229, 0.1);
+    color: var(--primary) !important;
+    border-left: 3px solid var(--primary);
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.loader {
+    width: 35px;
+    height: 35px;
+    border: 3px solid #e5e7eb;
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
