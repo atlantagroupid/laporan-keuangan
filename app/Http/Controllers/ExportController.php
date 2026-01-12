@@ -13,10 +13,12 @@ class ExportController extends Controller
 {
     public function exportPdf(Request $request)
     {
-        $user = auth()->user();
+        $user = $request->user();
         $data = $this->getFilteredData($request);
 
-        $setting = $user->setting ?? $user->setting()->create(['app_title' => 'Laporan Keuangan']);
+        $admin = \App\Models\User::where('role', 'super_admin')->first();
+        $setting = $admin?->setting ?? $user->setting ?? new \App\Models\Setting(['app_title' => 'Laporan Keuangan']);
+
         $walletName = $request->wallet_id === 'all' || !$request->filled('wallet_id')
             ? 'Semua Dompet'
             : $user->wallets()->find($request->wallet_id)?->name ?? 'Semua Dompet';
@@ -27,22 +29,46 @@ class ExportController extends Controller
             'totalOut' => $data['totalOut'],
             'balance' => $data['balance'],
             'appTitle' => $setting->app_title,
+            'appLogo' => $setting->app_logo,
             'walletName' => $walletName,
-            'printDate' => now()->translatedFormat('d F Y'),
+            'walletName' => $walletName,
+            'printDate' => now()->translatedFormat('d F Y H:i'),
+            'period' => $this->getPeriodText($request),
         ]);
 
-        return $pdf->download($setting->app_title . '_' . $walletName . '.pdf');
+        return $pdf->stream($setting->app_title . '_' . $walletName . '.pdf');
     }
 
     public function exportExcel(Request $request): BinaryFileResponse
     {
-        $user = auth()->user();
+        $user = $request->user();
         $data = $this->getFilteredData($request);
 
-        $setting = $user->setting ?? $user->setting()->create(['app_title' => 'Laporan Keuangan']);
+        $admin = \App\Models\User::where('role', 'super_admin')->first();
+        $setting = $admin?->setting ?? $user->setting ?? new \App\Models\Setting(['app_title' => 'Laporan Keuangan']);
+
         $walletName = $request->wallet_id === 'all' || !$request->filled('wallet_id')
             ? 'Semua Dompet'
             : $user->wallets()->find($request->wallet_id)?->name ?? 'Semua Dompet';
+
+        // Calculate Category Statistics
+        $categoryStats = $data['transactions']->groupBy(function ($trx) {
+            // Group by Type AND Category Name to ensure separation
+            return $trx->tipe . '_' . ($trx->category->name ?? 'Lainnya');
+        })->map(function ($group) use ($data) {
+            $total = $group->sum('jumlah');
+            $type = $group->first()->tipe;
+            $percentage = $type === 'pemasukan'
+                ? ($data['totalIn'] > 0 ? $total / $data['totalIn'] : 0)
+                : ($data['totalOut'] > 0 ? $total / $data['totalOut'] : 0);
+
+            return [
+                'label' => $group->first()->category->name ?? 'Lainnya',
+                'total' => $total,
+                'percentage' => $percentage,
+                'type' => $type
+            ];
+        })->values()->sortByDesc('total');
 
         return Excel::download(
             new TransactionsExport(
@@ -50,8 +76,11 @@ class ExportController extends Controller
                 $data['totalIn'],
                 $data['totalOut'],
                 $data['balance'],
+                $data['initialBalance'],
                 $setting->app_title,
-                $walletName
+                $walletName,
+                $this->getPeriodText($request),
+                $categoryStats
             ),
             $setting->app_title . '_' . $walletName . '.xlsx'
         );
@@ -59,8 +88,8 @@ class ExportController extends Controller
 
     private function getFilteredData(Request $request): array
     {
-        $user = auth()->user();
-        $query = $user->transactions()->with('wallet');
+        $user = $request->user();
+        $query = $user->transactions()->with(['wallet', 'category']);
 
         if ($request->filled('wallet_id') && $request->wallet_id !== 'all') {
             $query->where('wallet_id', $request->wallet_id);
@@ -89,9 +118,44 @@ class ExportController extends Controller
             }
         }
 
+        // Initial Balance Calculation
+        $initialBalance = 0;
+        $previousQuery = $user->transactions();
+
+        if ($request->filled('wallet_id') && $request->wallet_id !== 'all') {
+            $previousQuery->where('wallet_id', $request->wallet_id);
+        }
+
+        if ($request->filled('filter_type')) {
+            switch ($request->filter_type) {
+                case 'daily':
+                    $previousQuery->whereDate('tanggal', '<', $request->filter_date ?? now()->toDateString());
+                    break;
+                case 'monthly':
+                    if ($request->filled('filter_month')) {
+                        $date = \Carbon\Carbon::createFromFormat('Y-m', $request->filter_month)->startOfMonth();
+                        $previousQuery->whereDate('tanggal', '<', $date);
+                    }
+                    break;
+                case 'yearly':
+                    if ($request->filled('filter_year')) {
+                        $date = \Carbon\Carbon::createFromDate($request->filter_year, 1, 1)->startOfYear();
+                        $previousQuery->whereDate('tanggal', '<', $date);
+                    }
+                    break;
+            }
+
+            $initialBalanceModel = $previousQuery->selectRaw('
+                SUM(CASE WHEN tipe = "pemasukan" THEN jumlah ELSE 0 END) as total_in,
+                SUM(CASE WHEN tipe = "pengeluaran" THEN jumlah ELSE 0 END) as total_out
+            ')->first();
+
+            $initialBalance = ($initialBalanceModel->total_in ?? 0) - ($initialBalanceModel->total_out ?? 0);
+        }
+
         $transactions = $query->orderBy('tanggal', 'asc')->get();
 
-        $balance = 0;
+        $balance = $initialBalance;
         $totalIn = 0;
         $totalOut = 0;
 
@@ -107,6 +171,23 @@ class ExportController extends Controller
             return $trx;
         });
 
-        return compact('transactions', 'totalIn', 'totalOut', 'balance');
+        return compact('transactions', 'totalIn', 'totalOut', 'balance', 'initialBalance');
+    }
+
+    private function getPeriodText(Request $request): string
+    {
+        if ($request->filter_type === 'daily') {
+            return \Carbon\Carbon::parse($request->filter_date ?? now())->translatedFormat('d F Y');
+        }
+
+        if ($request->filter_type === 'monthly' && $request->filled('filter_month')) {
+            return \Carbon\Carbon::createFromFormat('Y-m', $request->filter_month)->translatedFormat('F Y');
+        }
+
+        if ($request->filter_type === 'yearly' && $request->filled('filter_year')) {
+            return 'Tahun ' . $request->filter_year;
+        }
+
+        return 'Semua Periode';
     }
 }

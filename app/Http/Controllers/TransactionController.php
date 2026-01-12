@@ -27,6 +27,7 @@ class TransactionController extends Controller
 
         $validated = $request->validate([
             'wallet_id' => 'required|exists:wallets,id',
+            'category_id' => 'nullable|exists:categories,id',
             'tanggal' => 'required|date',
             'keterangan' => 'required|string|max:255',
             'tipe' => 'required|in:pemasukan,pengeluaran',
@@ -69,6 +70,7 @@ class TransactionController extends Controller
 
         $validated = $request->validate([
             'wallet_id' => 'required|exists:wallets,id',
+            'category_id' => 'nullable|exists:categories,id',
             'tanggal' => 'required|date',
             'keterangan' => 'required|string|max:255',
             'tipe' => 'required|in:pemasukan,pengeluaran',
@@ -94,8 +96,12 @@ class TransactionController extends Controller
         return back()->with('success', 'Transaksi berhasil dihapus!');
     }
 
-    public function destroyAll(): RedirectResponse
+    public function destroyAll(Request $request): RedirectResponse
     {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $user->transactions()->delete();

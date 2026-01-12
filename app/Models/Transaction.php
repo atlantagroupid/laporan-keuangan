@@ -10,6 +10,7 @@ class Transaction extends Model
     protected $fillable = [
         'user_id',
         'wallet_id',
+        'category_id',
         'tanggal',
         'keterangan',
         'tipe',
@@ -29,6 +30,11 @@ class Transaction extends Model
     public function wallet(): BelongsTo
     {
         return $this->belongsTo(Wallet::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function getFormattedTanggalAttribute(): string

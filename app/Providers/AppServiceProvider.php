@@ -65,5 +65,8 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('setting', $setting);
         });
+
+        // Register User Observer
+        User::observe(\App\Observers\UserObserver::class);
     }
 }

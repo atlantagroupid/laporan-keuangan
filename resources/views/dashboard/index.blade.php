@@ -272,18 +272,26 @@
             <!-- Toolbar -->
             <div class="p-3 bg-light border-bottom">
                 <form method="GET" action="{{ route('dashboard') }}" id="filterForm">
-                    <div class="row g-2">
-                        <div class="col-md-3">
-                            <input type="text" name="search" class="form-control" placeholder="Cari keterangan..." value="{{ request('search') }}">
-                        </div>
+                    <div class="row g-2 align-items-center">
+                        <!-- 1. Search -->
                         <div class="col-md-2">
-                            <select name="wallet_id" class="form-select" onchange="document.getElementById('filterForm').submit()">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                                <input type="text" name="search" class="form-control border-start-0 ps-0" placeholder="Cari..." value="{{ request('search') }}">
+                            </div>
+                        </div>
+
+                        <!-- 2. Wallet -->
+                        <div class="col-md-3">
+                            <select name="wallet_id" class="form-select">
                                 <option value="all">Semua Dompet</option>
                                 @foreach($wallets as $wallet)
                                 <option value="{{ $wallet->id }}" {{ request('wallet_id') == $wallet->id ? 'selected' : '' }}>{{ $wallet->name }}</option>
                                 @endforeach
                             </select>
                         </div>
+
+                        <!-- 3. Filter Type -->
                         <div class="col-md-2">
                             <select name="filter_type" class="form-select" id="filterType" onchange="toggleFilterInputs()">
                                 <option value="">Semua Waktu</option>
@@ -292,15 +300,26 @@
                                 <option value="yearly" {{ request('filter_type') == 'yearly' ? 'selected' : '' }}>Tahunan</option>
                             </select>
                         </div>
+
+                        <!-- 4. Date Inputs -->
                         <div class="col-md-2">
                             <input type="date" name="filter_date" class="form-control dynamic-date {{ request('filter_type') == 'daily' ? 'show' : '' }}" id="fDaily" value="{{ request('filter_date', date('Y-m-d')) }}">
                             <input type="month" name="filter_month" class="form-control dynamic-date {{ request('filter_type') == 'monthly' ? 'show' : '' }}" id="fMonthly" value="{{ request('filter_month', date('Y-m')) }}">
                             <input type="number" name="filter_year" class="form-control dynamic-date {{ request('filter_type') == 'yearly' ? 'show' : '' }}" id="fYearly" placeholder="Tahun" value="{{ request('filter_year', date('Y')) }}">
                         </div>
+
+                        <!-- 5. Actions -->
                         <div class="col-md-3 text-end d-flex gap-1 justify-content-end">
-                            <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
-                            <a href="{{ route('export.excel', request()->query()) }}" class="btn btn-excel btn-sm text-white"><i class="fas fa-file-excel"></i></a>
-                            <a href="{{ route('export.pdf', request()->query()) }}" class="btn btn-pdf btn-sm text-white"><i class="fas fa-file-pdf"></i></a>
+                            <button type="submit" class="btn btn-primary" title="Terapkan Filter"><i class="fas fa-filter"></i> Filter</button>
+                            
+                            @if(request()->anyFilled(['search', 'wallet_id', 'filter_type']))
+                                <a href="{{ route('dashboard') }}" class="btn btn-secondary" title="Reset Filter"><i class="fas fa-undo"></i></a>
+                            @endif
+
+                            <div class="vr mx-1"></div>
+
+                            <a href="{{ route('export.excel', request()->query()) }}" class="btn btn-excel text-white d-flex align-items-center justify-content-center px-3" title="Export Excel"><i class="fas fa-file-excel"></i></a>
+                            <button type="button" onclick="previewPdf()" class="btn btn-pdf text-white d-flex align-items-center justify-content-center px-3" title="Preview PDF"><i class="fas fa-file-pdf"></i></button>
                         </div>
                     </div>
                 </form>
@@ -323,6 +342,7 @@
                                 <th class="text-center" style="width: 50px">No</th>
                                 <th>Dompet</th>
                                 <th>Tanggal</th>
+                                <th>Kategori</th>
                                 <th>Keterangan</th>
                                 <th class="text-end">Jumlah</th>
                                 <th class="text-end">Saldo</th>
@@ -335,6 +355,17 @@
                                 <td class="text-center text-muted">{{ $index + 1 }}</td>
                                 <td><span class="badge-wallet">{{ $trx->wallet->name }}</span></td>
                                 <td class="text-nowrap">{{ $trx->tanggal->translatedFormat('d F Y') }}</td>
+                                <td>
+                                    @if($trx->category)
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-2 rounded-2 px-2 py-1" style="background: {{ $trx->category->color }}20; color: {{ $trx->category->color }}; font-size: 0.8rem;">
+                                                <i class="{{ $trx->category->icon }} me-1"></i>{{ $trx->category->name }}
+                                            </div>
+                                        </div>
+                                    @else
+                                        <small class="text-muted">--</small>
+                                    @endif
+                                </td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="trx-icon me-3 {{ $trx->tipe === 'pemasukan' ? 'icon-in' : 'icon-out' }}">
@@ -386,7 +417,14 @@
                                 <div class="fw-bold {{ $trx->tipe === 'pemasukan' ? 'text-success-custom' : 'text-danger-custom' }}">
                                     {{ $trx->tipe === 'pemasukan' ? '+' : '-' }} {{ number_format($trx->jumlah, 0, ',', '.') }}
                                 </div>
-                                <span class="badge-wallet" style="font-size: 0.7em;">{{ $trx->wallet->name }}</span>
+                                <div class="d-flex flex-column align-items-end gap-1">
+                                    <span class="badge-wallet" style="font-size: 0.7em;">{{ $trx->wallet->name }}</span>
+                                    @if($trx->category)
+                                        <span class="rounded-2 px-2 py-0" style="background: {{ $trx->category->color }}20; color: {{ $trx->category->color }}; font-size: 0.7em; font-weight: 500;">
+                                            <i class="{{ $trx->category->icon }} me-1"></i>{{ $trx->category->name }}
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
@@ -412,7 +450,6 @@
     </div>
 
     <!-- Statistics Section -->
-    <!-- Statistics Button -->
 
 </div>
 
@@ -466,6 +503,37 @@
                             <div class="modern-input-icon">
                                 <i class="fas fa-tag"></i>
                                 <input type="text" name="keterangan" class="form-control" placeholder="Contoh: Gaji, Belanja Sayur" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="modern-form-label">Kategori</label>
+                            <input type="hidden" name="category_id" id="categoryInput">
+                            <div class="dropdown w-100">
+                                <button class="form-select text-start d-flex align-items-center" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span id="categoryLabel"><i class="fas fa-folder me-2 text-muted"></i>-- Pilih Kategori --</span>
+                                </button>
+                                <ul class="dropdown-menu w-100" id="categoryList" style="max-height: 250px; overflow-y: auto;">
+                                    <li class="category-header-pemasukan"><h6 class="dropdown-header text-success"><i class="fas fa-arrow-down me-1"></i>Pemasukan</h6></li>
+                                    @foreach($categories->where('type', 'pemasukan') as $cat)
+                                    <li class="category-item" data-type="pemasukan">
+                                        <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectCategory({{ $cat->id }}, '{{ $cat->name }}', '{{ $cat->icon }}', '{{ $cat->color }}')">
+                                            <span class="me-2 rounded p-1" style="background: {{ $cat->color }}20; color: {{ $cat->color }};"><i class="{{ $cat->icon }}"></i></span>
+                                            {{ $cat->name }}
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                    <li class="category-divider"><hr class="dropdown-divider"></li>
+                                    <li class="category-header-pengeluaran"><h6 class="dropdown-header text-danger"><i class="fas fa-arrow-up me-1"></i>Pengeluaran</h6></li>
+                                    @foreach($categories->where('type', 'pengeluaran') as $cat)
+                                    <li class="category-item" data-type="pengeluaran">
+                                        <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectCategory({{ $cat->id }}, '{{ $cat->name }}', '{{ $cat->icon }}', '{{ $cat->color }}')">
+                                            <span class="me-2 rounded p-1" style="background: {{ $cat->color }}20; color: {{ $cat->color }};"><i class="{{ $cat->icon }}"></i></span>
+                                            {{ $cat->name }}
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
                         
@@ -525,83 +593,258 @@
     </div>
 </div>
 
-<!-- Settings Modal -->
+<!-- Settings Modal with Tabs -->
 <div class="modal fade" id="settingsModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Pengaturan</h5>
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-cog me-2 text-purple"></i>Pengaturan
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
-                <!-- Update Title -->
-                <form method="POST" action="{{ route('settings.update-title') }}" class="mb-4">
-                    @csrf
-                    <label class="form-label">Judul Laporan</label>
-                    <div class="input-group">
-                        <input type="text" name="app_title" class="form-control" value="{{ $setting->app_title }}" required>
-                        <button class="btn btn-primary"><i class="fas fa-save"></i></button>
-                    </div>
-                </form>
-
-                @if(auth()->user()->isSuperAdmin())
-                <!-- Logo Upload (Super Admin Only) -->
-                <div class="mb-4">
-                    <label class="form-label">Logo Aplikasi</label>
-                    @if($setting->app_logo && file_exists(public_path($setting->app_logo)))
-                    <div class="mb-2 p-3 bg-light rounded d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <img src="{{ asset($setting->app_logo) }}" alt="Logo" style="height: 40px; width: auto;" class="me-2">
-                            <small class="text-muted">Logo saat ini</small>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{ route('settings.delete-logo') }}', 'Logo Aplikasi')">
-                            <i class="fas fa-trash"></i>
+            <div class="modal-body p-0">
+                <!-- Tab Navigation -->
+                <ul class="nav nav-tabs px-4 pt-3" id="settingsTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="tab-umum" data-bs-toggle="tab" data-bs-target="#umum" type="button" role="tab">
+                            <i class="fas fa-sliders-h me-2"></i>Umum
                         </button>
-                    </div>
-                    @endif
-                    <form method="POST" action="{{ route('settings.update-logo') }}" enctype="multipart/form-data">
-                        @csrf
-                        <div class="input-group">
-                            <input type="file" name="app_logo" class="form-control" accept="image/*" required>
-                            <button class="btn btn-success"><i class="fas fa-upload"></i></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-dompet" data-bs-toggle="tab" data-bs-target="#dompet" type="button" role="tab">
+                            <i class="fas fa-wallet me-2"></i>Dompet
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-kategori" data-bs-toggle="tab" data-bs-target="#kategori" type="button" role="tab">
+                            <i class="fas fa-tags me-2"></i>Kategori
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content p-4" id="settingsTabContent">
+                    <!-- Tab Umum -->
+                    <div class="tab-pane fade show active" id="umum" role="tabpanel">
+                        <!-- Update Title -->
+                        <form method="POST" action="{{ route('settings.update-title') }}" class="mb-4">
+                            @csrf
+                            <label class="form-label fw-bold">Judul Laporan</label>
+                            <div class="input-group">
+                                <input type="text" name="app_title" class="form-control" value="{{ $setting->app_title }}" required>
+                                <button class="btn btn-primary"><i class="fas fa-save"></i></button>
+                            </div>
+                        </form>
+
+                        @if(auth()->user()->isSuperAdmin())
+                        <!-- Logo Upload (Super Admin Only) -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Logo Aplikasi</label>
+                            @if($setting->app_logo && file_exists(public_path($setting->app_logo)))
+                            <div class="mb-2 p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset($setting->app_logo) }}" alt="Logo" style="height: 40px; width: auto;" class="me-2">
+                                    <small class="text-muted">Logo saat ini</small>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{ route('settings.delete-logo') }}', 'Logo Aplikasi')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            @endif
+                            <form method="POST" action="{{ route('settings.update-logo') }}" enctype="multipart/form-data">
+                                @csrf
+                                <div class="input-group">
+                                    <input type="file" name="app_logo" class="form-control" accept="image/*" required>
+                                    <button class="btn btn-success"><i class="fas fa-upload"></i></button>
+                                </div>
+                                <small class="text-muted">Format: JPG, PNG, GIF, WebP. Max: 2MB.</small>
+                            </form>
                         </div>
-                        <small class="text-muted">Format: JPG, PNG, GIF, WebP. Max: 2MB. Akan diconvert ke WebP.</small>
-                    </form>
-                </div>
-                @endif
-
-                <!-- Wallet Management -->
-                <label class="form-label">Kelola Dompet</label>
-                <form method="POST" action="{{ route('wallets.store') }}" class="mb-3">
-                    @csrf
-                    <div class="input-group">
-                        <input type="text" name="name" class="form-control" placeholder="Nama dompet baru..." required>
-                        <button class="btn btn-success"><i class="fas fa-plus"></i></button>
+                        @endif
                     </div>
-                </form>
-                
-                <div class="list-group mb-4" style="max-height: 200px; overflow-y: auto;">
-                    @forelse($wallets as $wallet)
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>{{ $wallet->name }}</span>
-                        <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{ route('wallets.destroy', $wallet) }}', 'dompet {{ $wallet->name }}')"><i class="fas fa-times"></i></button>
-                    </div>
-                    @empty
-                    <p class="text-center text-muted py-3">Belum ada dompet.</p>
-                    @endforelse
-                </div>
 
-                <!-- Danger Zone -->
-                <hr>
-                <label class="form-label text-danger">Zona Bahaya</label>
-                <button class="btn btn-outline-danger w-100" onclick="confirmDelete('{{ route('transactions.destroy-all') }}', 'SEMUA TRANSAKSI', true)"><i class="fas fa-trash me-2"></i>Hapus Semua Transaksi</button>
+                    <!-- Tab Dompet -->
+                    <div class="tab-pane fade" id="dompet" role="tabpanel">
+                        <!-- Wallet Management -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold"><i class="fas fa-plus-circle me-2"></i>Tambah Dompet Baru</label>
+                            <form method="POST" action="{{ route('wallets.store') }}" class="mb-3">
+                                @csrf
+                                <div class="input-group">
+                                    <input type="text" name="name" class="form-control" placeholder="Nama dompet baru..." required>
+                                    <button class="btn btn-success"><i class="fas fa-plus"></i> Tambah</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold"><i class="fas fa-list me-2"></i>Daftar Dompet</label>
+                            <div class="list-group" style="max-height: 200px; overflow-y: auto;">
+                                @forelse($wallets as $wallet)
+                                <div class="list-group-item d-flex justify-content-between align-items-center border-0 bg-light rounded-3 mb-2">
+                                    <span><i class="fas fa-wallet me-2 text-purple"></i>{{ $wallet->name }}</span>
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-outline-primary" onclick="editWallet({{ $wallet->id }}, '{{ $wallet->name }}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger" onclick="confirmDelete('{{ route('wallets.destroy', $wallet) }}', 'dompet {{ $wallet->name }}')"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                                @empty
+                                <p class="text-center text-muted py-3">Belum ada dompet.</p>
+                                @endforelse
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <hr>
+                        <label class="form-label text-danger fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Zona Bahaya</label>
+                        <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteAllModal"><i class="fas fa-trash me-2"></i>Hapus Semua Transaksi</button>
+                    </div>
+
+                    <!-- Tab Kategori -->
+                    <div class="tab-pane fade" id="kategori" role="tabpanel">
+                        <!-- Add New Category -->
+                        <form method="POST" action="{{ route('categories.store') }}" class="mb-4 p-3 bg-light rounded-4">
+                            @csrf
+                            <h6 class="fw-bold mb-3"><i class="fas fa-plus-circle me-2"></i>Tambah Kategori Baru</h6>
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <input type="text" name="name" class="form-control" placeholder="Nama Kategori" required>
+                                </div>
+                                <div class="col-6">
+                                    <select name="type" class="form-select" required>
+                                        <option value="pengeluaran">Pengeluaran</option>
+                                        <option value="pemasukan">Pemasukan</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <input type="color" name="color" class="form-control form-control-color w-100" value="#667eea" title="Pilih warna">
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" name="icon" class="form-control" placeholder="Icon (fas fa-coffee)" value="fas fa-tag">
+                                </div>
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-primary w-100"><i class="fas fa-plus"></i> Tambah</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Category List -->
+                        <div class="row">
+                            <!-- Pengeluaran -->
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-danger fw-bold mb-2"><i class="fas fa-arrow-up me-1"></i>Pengeluaran</h6>
+                                <div class="list-group" style="max-height: 250px; overflow-y: auto;">
+                                    @foreach($categories->where('type', 'pengeluaran') as $cat)
+                                    <div class="list-group-item d-flex justify-content-between align-items-center border-0 bg-light rounded-3 mb-2 py-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-2 rounded-2 p-1" style="background: {{ $cat->color }}20; color: {{ $cat->color }};">
+                                                <i class="{{ $cat->icon }}"></i>
+                                            </div>
+                                            <small>{{ $cat->name }}</small>
+                                        </div>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="editCategory({{ $cat->id }}, '{{ $cat->name }}', '{{ $cat->icon }}', '{{ $cat->color }}', '{{ $cat->type }}')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            @if($cat->transactions->count() == 0)
+                                            <form method="POST" action="{{ route('categories.destroy', $cat) }}" class="d-inline" onsubmit="return confirm('Hapus?')">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- Pemasukan -->
+                            <div class="col-md-6">
+                                <h6 class="text-success fw-bold mb-2"><i class="fas fa-arrow-down me-1"></i>Pemasukan</h6>
+                                <div class="list-group" style="max-height: 250px; overflow-y: auto;">
+                                    @foreach($categories->where('type', 'pemasukan') as $cat)
+                                    <div class="list-group-item d-flex justify-content-between align-items-center border-0 bg-light rounded-3 mb-2 py-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-2 rounded-2 p-1" style="background: {{ $cat->color }}20; color: {{ $cat->color }};">
+                                                <i class="{{ $cat->icon }}"></i>
+                                            </div>
+                                            <small>{{ $cat->name }}</small>
+                                        </div>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="editCategory({{ $cat->id }}, '{{ $cat->name }}', '{{ $cat->icon }}', '{{ $cat->color }}', '{{ $cat->type }}')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            @if($cat->transactions->count() == 0)
+                                            <form method="POST" action="{{ route('categories.destroy', $cat) }}" class="d-inline" onsubmit="return confirm('Hapus?')">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer border-0">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Delete All Transactions Confirmation Modal -->
+<div class="modal fade" id="deleteAllModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <form method="POST" action="{{ route('transactions.destroy-all') }}">
+                @csrf
+                @method('DELETE')
+                
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center py-4 px-5">
+                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex p-4 mb-4">
+                        <i class="fas fa-bomb fa-3x"></i>
+                    </div>
+                    <h3 class="fw-bold mb-2">Zona Bahaya!</h3>
+                    <p class="text-muted mb-4">Anda akan menghapus <strong>SEMUA</strong> data transaksi. Tindakan ini tidak dapat dibatalkan.</p>
+                    
+                    <div class="form-floating mb-4 text-start">
+                        <input type="password" class="form-control rounded-4 @error('password') is-invalid @enderror" 
+                               id="delete_all_password" name="password" placeholder="Password" required>
+                        <label for="delete_all_password">Masukkan password konfirmasi</label>
+                        @error('password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center pb-5 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4 me-2" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-5 hover-scale">
+                        <i class="fas fa-trash-alt me-2"></i> Ya, Hapus Semuanya
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if($errors->has('password'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var myModal = new bootstrap.Modal(document.getElementById('deleteAllModal'));
+        myModal.show();
+    });
+</script>
+@endif
 
 <!-- Balance Confirmation Modal -->
 <div class="modal fade" id="balanceConfirmModal" tabindex="-1">
@@ -676,13 +919,13 @@
 
                 <div class="row g-4">
                     <!-- Monthly Trend Chart -->
-                    <div class="col-lg-8 col-xl-7">
-                        <div class="card border-0 shadow-sm h-100 rounded-4">
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm rounded-4">
                             <div class="card-header bg-white border-0 pt-3 pb-0 px-4">
                                 <h6 class="mb-0 fw-bold border-start border-primary border-4 ps-3">Trend 6 Bulan Terakhir</h6>
                             </div>
                             <div class="card-body px-4 pb-4">
-                                <div style="position: relative; height:300px;">
+                                <div style="position: relative; height:300px; width:100%;">
                                     <canvas id="trendChart"></canvas>
                                 </div>
                             </div>
@@ -690,12 +933,12 @@
                     </div>
 
                     <!-- Top Pengeluaran -->
-                    <div class="col-lg-4 col-xl-5">
+                    <div class="col-lg-6">
                         <div class="card border-0 shadow-sm h-100 rounded-4">
                             <div class="card-header bg-white border-0 pt-3 pb-0 px-4">
-                                <h6 class="mb-0 fw-bold border-start border-danger border-4 ps-3">Top 5 Pengeluaran</h6>
+                                <h6 class="mb-0 fw-bold border-start border-danger border-4 ps-3">Distribusi Pengeluaran</h6>
                             </div>
-                            <div class="card-body px-4 pb-4 d-flex align-items-center">
+                            <div class="card-body px-4 pb-4 d-flex align-items-center justify-content-center">
                                 @if($statistics['topPengeluaran']->isEmpty())
                                 <div class="text-center w-100 py-5">
                                     <i class="fas fa-chart-pie fa-3x text-light mb-3"></i>
@@ -703,7 +946,28 @@
                                 </div>
                                 @else
                                 <div style="position: relative; height:300px; width:100%;">
-                                    <canvas id="topChart"></canvas>
+                                    <canvas id="expenseChart"></canvas>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Pemasukan -->
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm h-100 rounded-4">
+                            <div class="card-header bg-white border-0 pt-3 pb-0 px-4">
+                                <h6 class="mb-0 fw-bold border-start border-success border-4 ps-3">Distribusi Pemasukan</h6>
+                            </div>
+                            <div class="card-body px-4 pb-4 d-flex align-items-center justify-content-center">
+                                @if($statistics['topPemasukan']->isEmpty())
+                                <div class="text-center w-100 py-5">
+                                    <i class="fas fa-chart-line fa-3x text-light mb-3"></i>
+                                    <p class="text-muted">Belum ada data</p>
+                                </div>
+                                @else
+                                <div style="position: relative; height:300px; width:100%;">
+                                    <canvas id="incomeChart"></canvas>
                                 </div>
                                 @endif
                             </div>
@@ -711,7 +975,8 @@
                     </div>
 
                     <!-- Month Comparison -->
-                    <div class="col-lg-6">
+                    <div class="col-12">
+
                         <div class="card border-0 shadow-sm h-100 rounded-4">
                             <div class="card-header bg-white border-0 pt-3 pb-0 px-4">
                                 <h6 class="mb-0 fw-bold border-start border-info border-4 ps-3">Perbandingan Periode</h6>
@@ -753,7 +1018,8 @@
                     </div>
 
                     <!-- Wallet Stats -->
-                    <div class="col-lg-6">
+
+                    <div class="col-12">
                         <div class="card border-0 shadow-sm h-100 rounded-4">
                             <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3 pb-0 px-4">
                                 <h6 class="mb-0 fw-bold border-start border-purple border-4 ps-3">Statistik Dompet</h6>
@@ -795,6 +1061,207 @@
         </div>
     </div>
 </div>
+
+<!-- Categories Modal -->
+<div class="modal fade" id="categoriesModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-tags me-2 text-purple"></i>Kelola Kategori
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add New Category -->
+                <form method="POST" action="{{ route('categories.store') }}" class="mb-4 p-3 bg-light rounded-4">
+                    @csrf
+                    <h6 class="fw-bold mb-3"><i class="fas fa-plus-circle me-2"></i>Tambah Kategori</h6>
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <input type="text" name="name" class="form-control" placeholder="Nama Kategori" required>
+                        </div>
+                        <div class="col-6">
+                            <select name="type" class="form-select" required>
+                                <option value="pengeluaran">Pengeluaran</option>
+                                <option value="pemasukan">Pemasukan</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <input type="color" name="color" class="form-control form-control-color w-100" value="#667eea" title="Pilih warna">
+                        </div>
+                        <div class="col-8">
+                            <input type="text" name="icon" class="form-control" placeholder="Icon (mis: fas fa-coffee)" value="fas fa-tag">
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Category List -->
+                <h6 class="fw-bold mb-3"><i class="fas fa-list me-2"></i>Daftar Kategori</h6>
+                
+                <!-- Pengeluaran -->
+                <div class="mb-3">
+                    <small class="text-danger fw-bold"><i class="fas fa-arrow-up me-1"></i>PENGELUARAN</small>
+                    <div class="list-group mt-2">
+                        @foreach($categories->where('type', 'pengeluaran') as $cat)
+                        <div class="list-group-item d-flex justify-content-between align-items-center border-0 bg-light rounded-3 mb-2">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 rounded-2 p-2" style="background: {{ $cat->color }}20; color: {{ $cat->color }};">
+                                    <i class="{{ $cat->icon }}"></i>
+                                </div>
+                                <span>{{ $cat->name }}</span>
+                            </div>
+                            <div class="d-flex gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="editCategory({{ $cat->id }}, '{{ $cat->name }}', '{{ $cat->icon }}', '{{ $cat->color }}', '{{ $cat->type }}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                @if($cat->transactions->count() == 0)
+                                <form method="POST" action="{{ route('categories.destroy', $cat) }}" class="d-inline" onsubmit="return confirm('Hapus kategori ini?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                </form>
+                                @else
+                                <button class="btn btn-sm btn-secondary" disabled title="Ada transaksi"><i class="fas fa-trash"></i></button>
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Pemasukan -->
+                <div>
+                    <small class="text-success fw-bold"><i class="fas fa-arrow-down me-1"></i>PEMASUKAN</small>
+                    <div class="list-group mt-2">
+                        @foreach($categories->where('type', 'pemasukan') as $cat)
+                        <div class="list-group-item d-flex justify-content-between align-items-center border-0 bg-light rounded-3 mb-2">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 rounded-2 p-2" style="background: {{ $cat->color }}20; color: {{ $cat->color }};">
+                                    <i class="{{ $cat->icon }}"></i>
+                                </div>
+                                <span>{{ $cat->name }}</span>
+                            </div>
+                            <div class="d-flex gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="editCategory({{ $cat->id }}, '{{ $cat->name }}', '{{ $cat->icon }}', '{{ $cat->color }}', '{{ $cat->type }}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                @if($cat->transactions->count() == 0)
+                                <form method="POST" action="{{ route('categories.destroy', $cat) }}" class="d-inline" onsubmit="return confirm('Hapus kategori ini?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                </form>
+                                @else
+                                <button class="btn btn-sm btn-secondary" disabled title="Ada transaksi"><i class="fas fa-trash"></i></button>
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <form id="editCategoryForm" method="POST">
+                @csrf @method('PUT')
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Kategori</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nama</label>
+                        <input type="text" name="name" id="editCatName" class="form-control" required>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Tipe</label>
+                            <select name="type" id="editCatType" class="form-select">
+                                <option value="pengeluaran">Pengeluaran</option>
+                                <option value="pemasukan">Pemasukan</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Warna</label>
+                            <input type="color" name="color" id="editCatColor" class="form-control form-control-color w-100">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Icon (FontAwesome)</label>
+                        <input type="text" name="icon" id="editCatIcon" class="form-control" placeholder="fas fa-tag">
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Wallet Modal -->
+<div class="modal fade" id="editWalletModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <form id="editWalletForm" method="POST">
+                @csrf @method('PUT')
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-wallet me-2"></i>Edit Dompet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Dompet</label>
+                        <input type="text" name="name" id="editWalletName" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- PDF Preview Modal -->
+<div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content" style="border-radius: 20px; border: none; overflow: hidden; height: 90vh;">
+            <div class="modal-header border-bottom bg-light px-4 py-3">
+                <h5 class="modal-title fw-bold text-danger"><i class="fas fa-file-pdf me-2"></i>Pratinjau Laporan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0" style="background: #525659;">
+                <iframe id="pdfFrame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function previewPdf() {
+    // Collect current filter parameters
+    const params = new URLSearchParams(new FormData(document.getElementById('filterForm')));
+    const url = "{{ route('export.pdf') }}?" + params.toString();
+    
+    // Set iframe src and show modal
+    document.getElementById('pdfFrame').src = url;
+    const modal = new bootstrap.Modal(document.getElementById('pdfPreviewModal'));
+    modal.show();
+}
+</script>
 @endsection
 
 @push('scripts')
@@ -811,11 +1278,21 @@ function toggleFilterInputs() {
 
 function resetForm() {
     const form = document.getElementById('transactionForm');
+    if (!form) return;
+
     form.action = "{{ route('transactions.store') }}";
     document.getElementById('formMethod').value = 'POST';
     document.getElementById('modalTitle').textContent = 'Tambah Transaksi';
     form.reset();
     
+    // Reset warning state
+    if (document.getElementById('balanceWarning')) {
+        document.getElementById('balanceWarning').classList.add('d-none');
+    }
+
+    // Update balance context for the default selected wallet after reset
+    updateWalletBalance();
+
     // Reset Segmented UI
     document.querySelector('.type-btn[data-type="pemasukan"]').click();
     
@@ -831,24 +1308,47 @@ function resetForm() {
     if (dateInput._flatpickr) {
         dateInput._flatpickr.setDate(todayString);
     }
+
+    // Reset category selection
+    document.getElementById('categoryInput').value = '';
+    document.getElementById('categoryLabel').innerHTML = '<i class="fas fa-folder me-2 text-muted"></i>-- Pilih Kategori --';
+
+    isEditing = false;
+    originalAmount = 0;
+    originalType = '';
+    originalWalletId = 0;
 }
 
 function editTransaction(trx) {
     const form = document.getElementById('transactionForm');
     if (!form) return;
 
+    // Reset warning state
+    if (document.getElementById('balanceWarning')) {
+        document.getElementById('balanceWarning').classList.add('d-none');
+    }
+
     form.action = "{{ url('transactions') }}/" + trx.id;
     document.getElementById('formMethod').value = 'PUT';
     document.getElementById('modalTitle').textContent = 'Edit Transaksi';
     
-    // Update Segmented UI
-    document.querySelector(`.type-btn[data-type="${trx.tipe}"]`).click();
-
+    isEditing = true;
+    originalAmount = parseInt(trx.jumlah);
+    originalType = trx.tipe;
+    originalWalletId = parseInt(trx.wallet_id);
+    
+    // 1. Set Wallet FIRST to load correct currentWalletBalance
     const walletSelect = document.getElementById('walletSelect');
     if (walletSelect) {
         walletSelect.value = trx.wallet_id;
-        walletSelect.dispatchEvent(new Event('change'));
+        updateWalletBalance(); 
     }
+
+    // 2. Set amount (triggers validateBalance with correct context)
+    setJumlahValue(parseInt(trx.jumlah));
+
+    // 3. Set type (triggers UI updates and validateBalance again)
+    document.querySelector(`.type-btn[data-type="${trx.tipe}"]`).click();
 
     const tanggalInput = form.querySelector('[name="tanggal"]');
     if (tanggalInput && trx.tanggal) {
@@ -858,7 +1358,13 @@ function editTransaction(trx) {
     const ketInput = form.querySelector('[name="keterangan"]');
     if (ketInput) ketInput.value = trx.keterangan;
     
-    setJumlahValue(parseInt(trx.jumlah));
+    // Set category
+    if (trx.category) {
+        selectCategory(trx.category.id, trx.category.name, trx.category.icon, trx.category.color);
+    } else {
+        document.getElementById('categoryInput').value = '';
+        document.getElementById('categoryLabel').innerHTML = '<i class="fas fa-folder me-2 text-muted"></i>-- Pilih Kategori --';
+    }
     
     new bootstrap.Modal(document.getElementById('transactionModal')).show();
 }
@@ -879,8 +1385,37 @@ document.querySelectorAll('.type-btn').forEach(btn => {
             displayContainer.style.color = '#ef4444';
         }
         
+        // Filter categories based on type
+        filterCategoriesByType(type);
+        
         updateWalletBalance();
     });
+});
+
+// Filter categories dropdown based on transaction type
+function filterCategoriesByType(type) {
+    // Show/hide category items based on type
+    document.querySelectorAll('.category-item').forEach(item => {
+        if (item.dataset.type === type) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    
+    // Show/hide headers and divider
+    document.querySelector('.category-header-pemasukan').style.display = type === 'pemasukan' ? '' : 'none';
+    document.querySelector('.category-header-pengeluaran').style.display = type === 'pengeluaran' ? '' : 'none';
+    document.querySelector('.category-divider').style.display = 'none';
+    
+    // Reset category selection
+    document.getElementById('categoryInput').value = '';
+    document.getElementById('categoryLabel').innerHTML = '<i class="fas fa-folder me-2 text-muted"></i>-- Pilih Kategori --';
+}
+
+// Initialize category filter on page load (default: pemasukan)
+document.addEventListener('DOMContentLoaded', function() {
+    filterCategoriesByType('pemasukan');
 });
 
 // Initialize filter display
@@ -940,29 +1475,7 @@ if (trendCtx) {
     });
 }
 
-// Chart.js - Top Pengeluaran
-const topCtx = document.getElementById('topChart');
-if (topCtx) {
-    const topData = @json($statistics['topPengeluaran']);
-    
-    new Chart(topCtx, {
-        type: 'doughnut',
-        data: {
-            labels: topData.map(d => d.keterangan.length > 15 ? d.keterangan.substring(0, 15) + '...' : d.keterangan),
-            datasets: [{
-                data: topData.map(d => d.total),
-                backgroundColor: ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } }
-            }
-        }
-    });
-}
+
 
 // Currency Formatting for IDR
 const jumlahDisplay = document.getElementById('jumlahDisplay');
@@ -983,13 +1496,16 @@ function setJumlahValue(value) {
     
     if (jDisplay) jDisplay.value = formatRupiah(value);
     if (jReal) jReal.value = value;
+    
+    validateBalance();
 }
 
 if (jumlahDisplay) {
     jumlahDisplay.addEventListener('input', function(e) {
         let value = this.value.replace(/[^0-9]/g, '');
         this.value = formatRupiah(value);
-        jumlahReal.value = value;
+        if (jumlahReal) jumlahReal.value = value;
+        validateBalance(); // Single place for validation on input
     });
     
     jumlahDisplay.addEventListener('keypress', function(e) {
@@ -1003,6 +1519,10 @@ if (jumlahDisplay) {
 
 // Wallet Balance Management
 let currentWalletBalance = 0;
+let isEditing = false;
+let originalAmount = 0;
+let originalType = '';
+let originalWalletId = 0;
 
 function updateWalletBalance() {
     const walletSelect = document.getElementById('walletSelect');
@@ -1036,28 +1556,37 @@ function fillMaxAmount() {
 
 function validateBalance() {
     const tipeVal = document.getElementById('tipeValue') ? document.getElementById('tipeValue').value : 'pemasukan';
+    const walletVal = document.getElementById('walletSelect') ? parseInt(document.getElementById('walletSelect').value) : 0;
     const balanceWarning = document.getElementById('balanceWarning');
     const jumlahRealInp = document.getElementById('jumlahReal');
     const jumlahValue = jumlahRealInp ? (parseInt(jumlahRealInp.value) || 0) : 0;
     
     if (!balanceWarning) return;
     
-    if (tipeVal === 'pengeluaran' && jumlahValue > currentWalletBalance) {
+    let effectiveBalance = currentWalletBalance;
+    
+    // If we are editing a transaction in its original wallet, 
+    // we need to "undo" its impact on the balance for validation purposes.
+    if (isEditing && walletVal === originalWalletId) {
+        if (originalType === 'pengeluaran') {
+            effectiveBalance += originalAmount;
+        } else if (originalType === 'pemasukan') {
+            effectiveBalance -= originalAmount;
+        }
+    }
+    
+    // Only show warning if:
+    // 1. It's an expense (pengeluaran)
+    // 2. Amount is greater than 0
+    // 3. Amount exceeds effective available balance
+    if (tipeVal === 'pengeluaran' && jumlahValue > 0 && jumlahValue > effectiveBalance) {
         balanceWarning.classList.remove('d-none');
     } else {
         balanceWarning.classList.add('d-none');
     }
 }
 
-// Add validation on input change
-if (jumlahDisplay) {
-    jumlahDisplay.addEventListener('input', function(e) {
-        let value = this.value.replace(/[^0-9]/g, '');
-        this.value = formatRupiah(value);
-        if (jumlahReal) jumlahReal.value = value;
-        validateBalance();
-    });
-}
+// Consolidated validation onto the main input listener above.
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -1105,12 +1634,15 @@ document.getElementById('transactionForm')?.addEventListener('submit', function(
 });
 
 // Chart JS Initialization
-document.addEventListener('DOMContentLoaded', function() {
+// Initialize Charts when Modal is Shown
+document.getElementById('statisticsModal').addEventListener('shown.bs.modal', function () {
     const stats = @json($statistics);
-    
-    const formatCurrency = (value) => {
-        return 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
-    };
+    const formatCurrency = (value) => 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+
+    // Destroy existing charts if they exist to prevent duplicates
+    Chart.getChart("trendChart")?.destroy();
+    Chart.getChart("expenseChart")?.destroy();
+    Chart.getChart("incomeChart")?.destroy();
 
     // Trend Chart
     if(document.getElementById('trendChart')) {
@@ -1186,15 +1718,61 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Top Expense Chart
-    if(document.getElementById('topChart')) {
-        new Chart(document.getElementById('topChart'), {
+    if(document.getElementById('expenseChart')) {
+        new Chart(document.getElementById('expenseChart'), {
             type: 'doughnut',
             data: {
-                labels: stats.topPengeluaran.map(d => d.keterangan),
+                labels: stats.topPengeluaran.map(d => d.label),
                 datasets: [{
                     data: stats.topPengeluaran.map(d => d.total),
                     backgroundColor: [
-                        '#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#10b981', '#6366f1'
+                        '#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#10b981', '#6366f1', '#ec4899', '#84cc16'
+                    ],
+                    weight: 1,
+                    borderWidth: 4,
+                    borderColor: '#ffffff',
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { 
+                        position: 'bottom', 
+                        labels: { 
+                            boxWidth: 10, 
+                            padding: 15,
+                            usePointStyle: true
+                        } 
+                    },
+                    tooltip: {
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed !== null) label += formatCurrency(context.parsed);
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Top Pemasukan Chart
+    if(document.getElementById('incomeChart')) {
+        new Chart(document.getElementById('incomeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: stats.topPemasukan.map(d => d.label),
+                datasets: [{
+                    data: stats.topPemasukan.map(d => d.total),
+                    backgroundColor: [
+                        '#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#6366f1', '#ec4899', '#84cc16'
                     ],
                     weight: 1,
                     borderWidth: 4,
@@ -1239,5 +1817,32 @@ document.addEventListener('DOMContentLoaded', function() {
         transactionModal.show();
     });
 @endif
+
+// Edit Category Function
+function editCategory(id, name, icon, color, type) {
+    document.getElementById('editCategoryForm').action = '/categories/' + id;
+    document.getElementById('editCatName').value = name;
+    document.getElementById('editCatIcon').value = icon || '';
+    document.getElementById('editCatColor').value = color || '#667eea';
+    document.getElementById('editCatType').value = type;
+    
+    var editModal = new bootstrap.Modal(document.getElementById('editCategoryModal'));
+    editModal.show();
+}
+
+// Select Category for Transaction
+function selectCategory(id, name, icon, color) {
+    document.getElementById('categoryInput').value = id;
+    document.getElementById('categoryLabel').innerHTML = '<span class="me-2 rounded p-1" style="background: ' + color + '20; color: ' + color + ';"><i class="' + icon + '"></i></span>' + name;
+}
+
+// Edit Wallet Function
+function editWallet(id, name) {
+    document.getElementById('editWalletForm').action = '/wallets/' + id;
+    document.getElementById('editWalletName').value = name;
+    
+    var editModal = new bootstrap.Modal(document.getElementById('editWalletModal'));
+    editModal.show();
+}
 </script>
 @endpush

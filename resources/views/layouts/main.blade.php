@@ -31,7 +31,7 @@
     @if(isset($setting) && $setting->app_logo && file_exists(public_path($setting->app_logo)))
     <link rel="icon" href="{{ asset($setting->app_logo) }}">
     @else
-    <link rel="icon" href="https://via.placeholder.com/32x32.png?text=LK"> 
+    <link rel="icon" href="{{ asset('wallet.svg') }}"> 
     @endif
     
     <style>
